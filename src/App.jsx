@@ -1,19 +1,226 @@
 import { useState, useEffect } from 'react'
 import './index.css'
-import Territory from './Territory.jsx';
-import LegendElement from './legendElement.jsx';
+import PersonReact from './PersonReact.jsx';
 
-const DEFAULT_YEAR = 6;
-const DEFAULT_WEEK = 1;
+const DEFAULT_YEAR = 1330;
 const SHOW_DEBUG_COORDS_IN_CENTRE = false;
-const MAX_SPECULATIVE_CSV_CHECK_NUMBER = 30;  //as in, in any given year, it will look for a maximum of this many CSVs in the given folder. It should be a sensible limit that it is unlikely to ever reach, without being too high.
-const DEFAULT_PRECEDENCE = "N/A by territory";
+const MIN_YEAR = 1330;
+const MAX_YEAR = 1485;
+const CANVAS_WIDTH_VW = 80;
+const CANVAS_HEIGHT_VW = 200;
 
-let isReady = false;
+let curYear = DEFAULT_YEAR;
+
 let mouseIsOverPanel = false;
 let canvas = null;
 let hasDrawnToCanvasForFirstTime = false;
 let dragging = false;
+
+class PeriodOfDisinheritance {
+  start = 0;
+  end = 0;
+
+  constructor (start,end){
+      this.start = start;
+      this.end = end;
+  }
+}
+
+class Person {
+
+  constructor(id,personName,born,died,motherID,fatherID,spouses,xOffset,yOffset,isFemale,periodsOfDisinheritance,imgUrl,wikipediaUrl){
+    this.id = id;
+    this.personName = personName;
+    this.born = born;
+    this.died = died;
+    this.motherID = motherID;
+    this.fatherID = fatherID;
+    this.spouses = spouses;
+    this.xOffset = xOffset;
+    this.yOffset = yOffset;
+    this.isFemale = isFemale;
+    this.periodsOfDisinheritance = periodsOfDisinheritance;
+    this.imgUrl = imgUrl;
+    this.wikipediaUrl = wikipediaUrl;
+    this.father = null;
+    this.mother = null;
+  }
+
+  evaluateMyColour(){         
+    if (curYear < this.born){
+        this.domElement.style.color = "rgba(0,0,0,0.2)";
+        this.domElement.style.background = "#4C1A57";
+    } else if (curYear >= this.died){
+        this.domElement.style.color = "rgba(0,0,0,0.5)";
+        this.domElement.style.background = "dimgrey";
+    } else {
+        this.domElement.style.color = "black";
+        this.domElement.style.background = "skyblue";
+    }
+}
+
+  isCurrentlyDisinherited(){
+
+    if (this.periodsOfDisinheritance == null || this.periodsOfDisinheritance.length == 0){
+        return false;
+    }
+
+    for (let p of this.periodsOfDisinheritance){
+        if (curYear >= p.start && curYear <= p.end){
+            return true;
+        }
+    }
+
+    return false;
+  }
+
+  evaluateCrownPosition(disinherited){
+    if (this.mySuccessionPosition != -1){ 
+        return disinherited;    //then this person has already been considered in this cycle (which means they already have a better claim than the one that would have been evaluated if we hadn't made this check)
+    }
+
+    this.tooltipDomElement.textContent = "? not assigned? Is the linkage incorrect?";        
+    
+    if (curYear < this.born){
+        this.tooltipDomElement.textContent = "N/A";
+    }
+    else if (this.isCurrentlyDisinherited() || disinherited){
+        disinherited = true;
+        if (curYear >= this.died){
+            this.tooltipDomElement.textContent = "🚫💀";  //just making sure this applies when needed, otherwise there are edge cases
+        }
+    } else if (curYear >= this.died){
+        this.tooltipDomElement.textContent = "💀";
+    } else {        
+        this.mySuccessionPosition = positionInLineOfSuccessionCurrentlyUpForGrabs;
+        positionInLineOfSuccessionCurrentlyUpForGrabs++;
+
+        switch (this.mySuccessionPosition){
+            case 0:
+                this.tooltipDomElement.textContent = "👑";
+                this.domElement.style.background = "gold";
+            break;
+            case 1:
+                this.domElement.style.background = "silver";
+            break;
+            case 2:
+                this.domElement.style.background = "#cd7f32";
+            break;
+        }
+
+        if (this.mySuccessionPosition != 0){
+            this.tooltipDomElement.textContent = "#"+this.mySuccessionPosition+" in line";
+        }
+    }
+
+    if (disinherited && curYear >= this.born && curYear < this.died){       //this is here so that it only applies while alive, otherwise it gets lost in the if...else statement, meaning disinherited dead people end up labelled as disinherited, when really their being dead is more noteworthy
+        this.tooltipDomElement.textContent = "🚫 disinherited";
+    }
+
+    if (this.issue != null){ 
+        let malePreferenceIssue = issueWithMalePreferenceOrder(this.issue); //this orders the children so that the boys are prioritised, regardless of whether the girls are older      
+        for (let i = 0; i < malePreferenceIssue.length; i++){ 
+            let child = getPersonByID(malePreferenceIssue[i]);
+            if (child != null) {
+                child.evaluateCrownPosition(disinherited);
+            }
+        }
+    }
+  }
+}
+
+const people = [
+  new Person (0,"Edward III",1312,1377,-1,-1,null,50,5,false,[],
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/King_Edward_III.jpg/459px-King_Edward_III.jpg","/Edward_III_of_England"),
+  new Person (1,"Edward of Woodstock",1330,1376,-1,0,null,-40,10,false,[],
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Edward_the_Black_Prince_1430.jpg/450px-Edward_the_Black_Prince_1430.jpg","/Edward_the_Black_Prince"),
+  new Person (2,"Lionel of Antwerp",1338,1368,-1,0,null,-20,10,false,[],
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/LionelDukeOfClarenceAtWestminster.jpg/257px-LionelDukeOfClarenceAtWestminster.jpg","/Lionel_of_Antwerp"),
+  new Person (3,"John of Gaunt",1340,1399,-1,0,null,-5,10,false,[]),
+  new Person (4,"Edmund of Langley",1341,1402,-1,0,null,20,10,false,[]),
+  new Person (5,"Thomas of Woodstock",1355,1397,-1,0,null,40,10,false,[]),
+  new Person (6,"Richard II",1377,1399,-1,1,null,0,10,false,[]),
+  new Person (7,"Henry IV",1367,1413,-1,3,null,-20,10,false,[]),
+  new Person (8,"John Beaufort",1373,1410,-1,3,null,2.5,10,false,[]),
+  new Person (9,"Thomas Beaufort",1377,1426,-1,3,null,13,10,false,[]),
+  new Person (10,"Joan Beaufort",1379,1440,-1,3,null,22,10,true,[]),
+  new Person (11,"Henry V",1386,1422,-1,7,null,-100,150,false,[]),
+  new Person (12,"Humphrey of Lanc.",1390,1447,-1,7,null,50,10,false,[]),
+  new Person (13,"Henry VI",1421,1471,-1,11,null,50,10,false,[]),
+  new Person (14,"John B. (Duke of Somerset)",1404,1444,-1,8,null,-10,10,false,[]),
+  new Person (15,"Richard of Conisbrough",1385,1415,-1,4,[33],0,20,false,[]),
+  new Person (31,"Philippa of Clarence",1355,1382,-1,2,null,"1100px","115px",true,[new PeriodOfDisinheritance(1355,1460),new PeriodOfDisinheritance(1470,1470)]),  //see Anne de Mortimer comment below
+  new Person (32,"Roger Mortimer",1374,1398,-1,31,null,"0px","92px",false,[]),   //see Anne de Mortimer comment below
+  new Person (33,"Anne de Mortimer",1388,1411,-1,32,[15],"0px","92px",false,[]), //Anne is out of order because her ID was added later than most, but she needs to be spawned before Richard of York so that he descends from the marriage line rather than from his father alone. Logically she needed her parents spawned too, so they've been moved as well
+  new Person (16,"Richard of York",1411,1460,33,15,null,"0px","100px",false,[]),
+  new Person (17,"Margaret Beaufort",1443,1509,-1,14,null,"-150px","150px",true,[]),
+  new Person (18,"Henry VII",1457,1509,-1,17,[25],"0px","289px",false,[]),
+  new Person (19,"Edward IV",1442,1483,-1,16,null,"-175px","150px",false,[new PeriodOfDisinheritance(1483,1484)]),
+  new Person (20,"Richard III",1452,1485,-1,16,null,"175px","150px",false,[]),
+  new Person (21,"Edward of Westminster",1453,1471,-1,13,null,"0px","150px",false,[]),
+  new Person (22,"Edmund Beaufort",1406,1455,-1,8,null,"150px","150px",false,[]),
+  new Person (23,"Margaret Beaufort (Stafford)",1406,1455,-1,22,null,"0px","150px",true,[]),
+  new Person (24,"Duke of Buckingham",1455,1483,-1,23,null,"0px","150px",false,[]),
+  new Person (25,"Elizabeth of York",1466,1503,-1,19,[18],"-150px","150px",true,[]),
+  new Person (26,"Edward V",1470,1483,-1,19,null,"0px","150px",false,[]),
+  new Person (27,"Richard of Shrewsbury",1473,1483,-1,19,null,"175px","150px",false,[]),
+  new Person (28,"George, Duke of Clarence",1449,1478,-1,16,null,"0px","150px",false,[]),
+  new Person (29,"Henry Beaufort",1436,1464,-1,22,null,"-200px","150px",false,[]),
+  new Person (30,"Edmund 4th Duk. Somerset",1438,1471,-1,22,null,"245px","150px",false,[])
+];
+
+for (let i = 0; i < people.length; i++){
+  let p = people[i];  
+  p.father = getPersonByID(p.fatherID);
+  p.mother = getPersonByID(p.motherID);
+
+  console.log (p);
+  if (p.father != null && p.mother != null){
+    p.xOffset += (p.father.xOffset + p.mother.xOffset) / 2;
+    p.yOffset += (p.father.yOffset + p.mother.yOffset) / 2
+  } else if (p.father != null){    
+    p.xOffset += p.father.xOffset;
+    p.yOffset += p.father.yOffset;
+    console.log(p.xOffset);
+  } else if (p.mother != null){
+    p.xOffset += p.mother.xOffset;
+    p.yOffset += p.mother.yOffset;
+  }
+}
+
+function getPersonByID(id){
+  for (let i = 0; i < people.length; i++){
+    let p = people[i];
+      if (p.id == id){
+        return p;
+      }
+  }
+  return null;
+}
+
+function issueWithMalePreferenceOrder(orig){
+
+  if (orig == null || orig.length == 0){
+      return orig;
+  }
+
+  let issue = [...orig];
+
+  for (let m = 0; m < issue.length; m++){
+      if (getPersonByID(issue[m]).isFemale){ //only consider the m loop for men
+          continue;
+      }
+      for (let f = 0; f < issue.length; f++){
+          if (getPersonByID(issue[f]).isFemale && f < m){ //only consider the f loop for women, and only in cases where the women would outrank the man if nothing is changed
+              //console.log("It's splicing time because the woman with ID "+issue[f] + " is higher in the succession than a man");
+              //console.log("The man in question is " + getPersonByID(issue[m]).name);
+              let male = issue.splice(m,1);
+              issue.splice(f, 0, male);
+          }
+      }
+  }
+  return issue;
+}
 
 class Adjacency {
   constructor(week,x1,y1,x2,y2,sideOrTop1, sideOrTop2){
@@ -43,22 +250,12 @@ class Adjacency {
 
 function App (props){
 
-  let [territories,setTerritories] = useState([]);
   let [adjacencies,setAdjacencies] = useState([]);
-  let [year,setYear] = useState(-1);
-  let [week,setWeek] = useState(-1);
-  let [territoryLabelFontSize,setTerritoryLabelFontSize] = useState("1em");
-  let [weekTitle,setWeekTitle] = useState("");
   let [displayTop,setDisplayTop] = useState(0);
   let [displayLeft,setDisplayLeft] = useState(window.innerWidth > 1000 ? -16 : 0);
-  let [mapAdjustLeft,setMapAdjustLeft] = useState("54%");
+  let [mapAdjustLeft,setMapAdjustLeft] = useState("50%");
   let [mapAdjustTop,setMapAdjustTop] = useState("40%");
   let [fontSizeEm,setFontSizeEm] = useState(0.89);
-  let [loadedWeeks,setLoadedWeeks] = useState([]);
-  let [weekBounds,setWeekBounds] = useState([]);
-  let [clanPrecedence,setClanPrecedence] = useState(DEFAULT_PRECEDENCE);
-  let [covenantPrecedence,setCovenantPrecedence] = useState(DEFAULT_PRECEDENCE);
-  let [highlightedCategory,setHighlightedCategory] = useState(null);
   let [windowFontSize,setWindowFontSize] = useState(window.innerWidth < window.innerHeight ? (window.innerHeight/1920) +"em" : (window.innerWidth/927) +"em");
 
   document.addEventListener('mousedown', (ev) => {dragging = (true && !mouseIsOverPanel)});
@@ -72,9 +269,8 @@ function App (props){
     }
 
     useEffect(() => { //Only runs after initial render
-      changeYear(DEFAULT_YEAR);
       tryInitialiseCanvas();
-      redrawCanvasAccordingToWeek(week);
+      redrawCanvas();
       changeWindowFontSize();
     }, []); //ignore intelliense and keep this empty array; it makes this useEffect run only after the very first render, which is intended behaviour
 
@@ -83,227 +279,24 @@ function App (props){
     });
 
     function onMouseMove(event) {
-      if (dragging && isReady){
+      if (dragging){
         tryInitialiseCanvas();
         setDisplayLeft(displayLeft + (event.movementX / 16));
         setDisplayTop(displayTop + event.movementY);
-        setTerritories(territories);
       }
-    }
-
-    async function changeYear(newYearNumber){
-
-      if (year == newYearNumber){
-        console.log("Did not attempt to change year, because that year was already selected.");
-        return;
-      }
-      
-      let newLoadedWeeks = [];
-      let highestWeekFound = -1;
-    
-      for (let i = 1; i < MAX_SPECULATIVE_CSV_CHECK_NUMBER; i++){
-        let shouldBreakLoop = false;
-        await fetch("./csv/y"+newYearNumber+"/territoryAssignments-wk"+i+".csv")
-        .then(response => response.text())
-        .then(text => {
-          if (text != "" && text[0] != "<"){
-            let lines = text.trim().split("\n");
-            newLoadedWeeks.push({title: "Week "+i+" - "+lines[0], weekNumber:i, minX:null, maxX:null, minY:null, maxY:null});
-            getTerritoriesFromCSV(lines, i);
-            if (i > highestWeekFound){
-              highestWeekFound = i;
-            }
-          } else {
-            shouldBreakLoop = true;
-          }
-        });
-        if (shouldBreakLoop){
-          break;
-        }
-      }
-      newLoadedWeeks = newLoadedWeeks.sort((a, b) => a.weekNumber - b.weekNumber)
-      setYear(newYearNumber);
-      setWeek(highestWeekFound);
-      updatePrecedence(highestWeekFound);
-      setLoadedWeeks(newLoadedWeeks);
-      isReady = true;
-    
-      tryInitialiseCanvas();  
-    }
-
-    function changeWeek(newWeekNumber){    
-      setWeek(newWeekNumber);
-      updatePrecedence(newWeekNumber);
-      redrawCanvasAccordingToWeek(newWeekNumber);
-    }
-
-    function updatePrecedence(newWeekNumber){
-      let dict = {};
-      let highestClan = DEFAULT_PRECEDENCE;
-      let highestClanNumber = 0;
-      let maxConcurrentClans = 0;
-
-      let highestCovenant = DEFAULT_PRECEDENCE;
-      let highestCovenantNumber = 0;
-      let maxConcurrentCovenants = 0;
-
-      for (let i = 0; i < territories.length; i++){
-        let t = territories[i];
-        if (t.week == newWeekNumber){
-          if (t.alignment in dict){
-            dict[t.alignment]++;
-          } else {
-            dict[t.alignment] = 1;
-          }
-        }
-      }
-
-      for (let i = 0; i < Object.keys(dict).length; i++){
-        let key = Object.keys(dict)[i];
-        if (isClan(key)){
-          if (dict[key] == highestClanNumber){
-            highestClan += " vs "+ toTitleCase(key);
-            maxConcurrentClans++;
-          } else if (dict[key] > highestClanNumber){
-            highestClan = toTitleCase(key);
-            highestClanNumber = dict[key];
-            maxConcurrentClans = 1;
-          }
-        } else if (isCovenant(key)){
-          if (dict[key] == highestCovenantNumber){
-            highestCovenant += " vs "+ toTitleCase(key);
-            maxConcurrentCovenants++;
-          } else if (dict[key] > highestCovenantNumber){
-            highestCovenant = toTitleCase(key);
-            highestCovenantNumber = dict[key];
-            maxConcurrentCovenants = 1;
-          }
-        }
-      }
-
-      if (maxConcurrentClans >= 5){
-        highestClan = DEFAULT_PRECEDENCE;
-      }
-      if (maxConcurrentCovenants >= 5){
-        highestCovenant = DEFAULT_PRECEDENCE;
-      }
-
-      setClanPrecedence(highestClan);
-      setCovenantPrecedence(highestCovenant);
-    }
-
-    function toTitleCase(input){
-      let firstLetter = input.substr(0, 1);
-      let restOfString = input.substr(1);
-        
-      return firstLetter.toUpperCase() + restOfString;
-    }
-
-    function adjustClanOrCovenantSpelling(input){
-      input = input.toLowerCase();
-
-      if (input == "nos"){
-        input = "nosferatu";
-      } else if (input == "carthians"){
-        input = "carthian";
-      } else if (input == "circle"){
-        input = "crone";
-      } else if (input == "ordo dracul"){
-        input = "ordo";
-      } else if (input == "vics"){
-        input = "invictus";
-      } else if (input == "lancea"){
-        input = "lance";
-      }
-      return input;
-    }
-
-    function isClan(input){
-      switch (input){
-        case "ventrue":
-        case "daeva":
-        case "mekhet":
-        case "gangrel":
-        case "nosferatu":
-          return true;
-        default:
-          return false;
-      }
-    }
-
-    function isCovenant(input){
-      switch (input){
-        case "invictus":
-        case "carthian":
-        case "crone":
-        case "lance":
-        case "ordo":
-          return true;
-        default:
-          return false;
-      }
-    }
-
-    function getTerritoriesFromCSV(lines, week){
-
-      let line1Split = lines[1].split(",");
-    
-        setWeekTitle(lines[0]);
-        setTerritoryLabelFontSize(line1Split[0].trim());
-        
-        weekBounds.push({
-          week: week,
-          minX: parseFloat(line1Split[1].trim()),
-          maxX: parseFloat(line1Split[2].trim()),
-          minY: parseFloat(line1Split[3].trim()),
-          maxY: parseFloat(line1Split[4].trim())});
-    
-        for (let i = 3; i < lines.length; i++){
-            let splitLine = lines[i].replaceAll("%","").split(",");
-            if (splitLine[0].trim().includes("ADJ")){
-              adjacencies.push(
-                    new Adjacency(
-                        week,
-                        splitLine[1].trim(),
-                        splitLine[2].trim(),
-                        splitLine[3].trim(),
-                        splitLine[4].trim(),
-                        splitLine[5].trim(),
-                        splitLine[6].trim()));
-            } else {
-                let t = {
-                  name:splitLine[0].trim(),
-                  alignment:adjustClanOrCovenantSpelling(splitLine[1].trim()),
-                  holder:splitLine[2].trim(),
-                  posX:splitLine[3].trim() + "%",
-                  posY:splitLine[4].trim() + "%",
-                  maxHolderLineLength:parseFloat(splitLine[5].trim()),
-                  week:week
-                }
-                territories.push(t);
-              }
-          }
-      }
-
-    function getCurrentWeekBounds(week){
-      for(let i = 0; i < weekBounds.length; i++){
-        if (weekBounds[i].week == week){
-          return weekBounds[i];
-        }
-      }
-      return null;
     }
 
     function tryInitialiseCanvas(){
       if (!hasDrawnToCanvasForFirstTime){
         canvas = document.getElementById("canvas");
          if (canvas != null){
-            redrawCanvasAccordingToWeek(week);
+            console.log("Test")
+            redrawCanvas();
             }
           }
     }
 
-    function redrawCanvasAccordingToWeek(week){
+    function redrawCanvas(){
       if (canvas == null){
         return;
       }
@@ -329,109 +322,29 @@ function App (props){
         }
     }
 
-    let currentWeekBounds = getCurrentWeekBounds(week);
     tryInitialiseCanvas();
 
     return (
     <>
-        <h1 style={window.innerWidth < 1000 ? {display:'none'}: {}}>
-            {window.innerWidth > 1000 ? "Territory Map History" : "I recommend you use this on PC instead"}
+        <h1>
+            {window.innerWidth > 1000 ? "Wars of the Roses tree" : "I recommend you use this on PC instead"}
         </h1>
-        {isReady ? null : 
-          <h1 style={{marginTop: "2em", position:"absolute", top:"35%", textAlign:"center", width:"100%", display:"inherit", zIndex:"0"}}>
-              LOADING...
-          </h1>
-        }
+        <div style={{display:"flex", alignItems:"center", flexDirection:"column"}}>
+          {curYear}
+          <input className="onTop" style={{width:"50em", margin:"auto"}} type="range" min={MIN_YEAR} max={MAX_YEAR} step={1}/>
+        </div>
+       
         <div className="bigFlex">
           <div style={{width:"65%"}}>
             <div id="displayParent" style={{fontSize:windowFontSize, width:"100%"}}>
-              <div id="display" style={{position:'absolute',left:"calc("+mapAdjustLeft+" + "+displayLeft+"em)",
-                  top:"calc("+mapAdjustTop+" + "+displayTop+"px)",fontSize:fontSizeEm+"em"}}>
-                  {
-                    currentWeekBounds != null
-                    ?
-                  <div id="territories" style={{position:'absolute',left:currentWeekBounds.minX+"em", top:currentWeekBounds.minY+"em",width:(currentWeekBounds.maxX - currentWeekBounds.minX)+"em",height:(currentWeekBounds.maxY - currentWeekBounds.minY)+"em"}}>
-                    {territories.map((t) => t.week == week ? (<><Territory fadedOut={highlightedCategory == null ? false : (highlightedCategory != t.alignment)} t={t} name={t.name} alignment={t.alignment} holder={t.holder} posX={t.posX} posY={t.posY} week={t.week} maxHolderLineLength={t.maxHolderLineLength} territoryLabelFontSize={territoryLabelFontSize}/></>) : null)}
-                    <>{SHOW_DEBUG_COORDS_IN_CENTRE ? displayLeft + " " + displayTop : null}</>
-                    <canvas id="canvas" width="1920" height="1080" style={{width:"100%", height: "100%"}}></canvas>
-                    </div>
-                    : null                
-                  }
+              <div id="display" style={{position:'absolute',left:displayLeft+"em",
+                  top:displayTop+"px",fontSize:fontSizeEm+"em"}}>
+                  <div id="people" style={{position:'absolute',left:"0em", top:"0em",width:(CANVAS_WIDTH_VW*fontSizeEm)+"vw",height:(CANVAS_HEIGHT_VW*fontSizeEm)+"vh"}}>
+                    {people.map((p) => <><PersonReact person = {p}/></>)}
+                    <canvas style={{width:"100%", height:"100%"}}/>
+                  </div>
               </div>
             </div>
-            <p className="hideOnMobile" style={{color:"rgb(180,180,180)", margin: "2em 0 2em 6em", width: "100%", bottom:0, position:"absolute"}}>
-              Disclaimer: This is unofficial, and for comparing changes from past weeks - it's definitely not live!
-            </p>
-          </div>
-          <div id="panel" onMouseEnter={() => {mouseIsOverPanel = true;}} onMouseLeave={() => {mouseIsOverPanel = false;}}>
-              <h2 className="panelBox" style={{marginLeft:'0em', marginTop:'0.75em', textAlign:"center", color:"rgb(50,50,50)", width:"100%", height:"fit-content", display:window.innerWidth < 1000 ? 'inherit' : 'none'}}>
-                Territory Map History
-                <hr style={{marginBottom:"0em", opacity:"0.5"}}/>
-              </h2>
-              <div id="panelFlex" className="flex" >
-                <div id="legend" className="panelBox" style={{height:"fit-content"}}>
-                  <h2 style={{fontSize:window.innerWidth < 1000 ? "0.8em": "1.06em"}}>
-                    Legend
-                  </h2>
-                  <hr/>
-                  <div id="key" style={{overflow:'auto', width:"fit-content"}}>
-                    <div onMouseLeave={() => {setHighlightedCategory(null)}}>
-                      <div>
-                        <LegendElement alignment="Ventrue" setHighlightedCategory={setHighlightedCategory}/>
-                        <LegendElement alignment="Daeva" setHighlightedCategory={setHighlightedCategory}/>
-                        <LegendElement alignment="Mekhet" setHighlightedCategory={setHighlightedCategory}/>
-                        <LegendElement alignment="Gangrel" setHighlightedCategory={setHighlightedCategory}/>
-                        <LegendElement alignment="Nosferatu" setHighlightedCategory={setHighlightedCategory}/>
-                      </div>
-                      <div style={{marginTop:"0.25em"}}>
-                        <LegendElement alignment="Invictus" setHighlightedCategory={setHighlightedCategory}/>
-                        <LegendElement alignment="Carthian" setHighlightedCategory={setHighlightedCategory}/>
-                        <LegendElement alignment="Lance" setHighlightedCategory={setHighlightedCategory}/>
-                        <LegendElement alignment="Crone" setHighlightedCategory={setHighlightedCategory}/>
-                        <LegendElement alignment="Ordo" setHighlightedCategory={setHighlightedCategory}/>
-                      </div>
-                    </div>
-                    <div style={{marginTop:"0.5em"}} onMouseLeave={() => {setHighlightedCategory(null)}}>
-                      <LegendElement alignment="Court" setHighlightedCategory={setHighlightedCategory}/>
-                      <LegendElement alignment="Personal" setHighlightedCategory={setHighlightedCategory}/>
-                      <LegendElement alignment="Enemy" setHighlightedCategory={setHighlightedCategory}/>
-                      <LegendElement alignment="Unclaimed" setHighlightedCategory={setHighlightedCategory}/>
-                    </div>
-                  </div>
-                  <br/>
-                  <h2 style={{width:"100%", maxWidth:"100%", fontSize:window.innerWidth < 1000 ? "0.8em": "1.06em"}}>
-                    Clan precedence:
-                  </h2>
-                  <h2 style={{marginTop: "0.15em", color:"black", marginBottom: "1em", width:"fit-content", fontSize:window.innerWidth < 1000 ? "0.8em": "0.9em"}}>
-                    {clanPrecedence}
-                  </h2>
-                  <h2 style={{width:"100%", maxWidth:"100%", fontSize:window.innerWidth < 1000 ? "0.8em": "1.06em"}}>
-                    Covenant precedence:
-                  </h2>
-                  <h2 style={{marginTop: "0.15em", color:"black", width:"fit-content", fontSize:window.innerWidth < 1000 ? "0.8em": "0.9em"}}>
-                    {covenantPrecedence}
-                  </h2>
-                </div>
-                <div id="pastWeeks" className="panelBox">
-                  <h2 style={{whiteSpace:"nowrap", fontSize:window.innerWidth < 1000 ? "0.8em": "1.06em"}}>
-                    {window.innerWidth < 1000 ? "Select past week:" : "Select past week"}
-                  </h2>
-                  <hr/>
-                  <div className="weeksScroll">
-                    <>{loadedWeeks.map((wk) => <><h4 className={"weekOption"+ (wk.weekNumber == week ? " selected" : "")} onClick={() => week != wk.weekNumber ? changeWeek(wk.weekNumber) : null}>
-                                                    {window.innerWidth > 1000 ? wk.title : "Wk"+wk.weekNumber}
-                                                </h4></>)}</>
-                  </div>
-                  {
-                    screen.orientation.type.includes("landscape") ? 
-                    <>
-                      <br/><br/><br/><br/><br/><br/><br/>
-                    </>
-                    : null
-                  }
-                  
-                </div>
-              </div>
           </div>
         </div>
     </>

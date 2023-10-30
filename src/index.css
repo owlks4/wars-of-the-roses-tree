@@ -1,9 +1,10 @@
 html {
-    background-color: rgb(242,243,245);
+    background-color: rgb(8, 17, 36);
+    color: rgb(230, 221, 221);
     padding: 0;
     margin: 0;
     overflow: hidden;
-    font-family:'Courier New', Courier, monospace;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -33,365 +34,66 @@ body:active{
     overflow: hidden;
 }
 
+h1{
+    text-align:center;
+}
+
 canvas {
     position: absolute;
     width:100%;
 }
 
-.territory {
+.person {
     box-sizing: border-box;
     position: absolute;
-    border-radius: 0.5em;
-    padding: 0.5em;
+    border-radius: 0.05em;
+    padding-right: 0.5em;
     text-align:center;
+    vertical-align: middle;
     width:fit-content;
+    height:fit-content;
     font-family: sans-serif;
-    border: 0.1em solid rgb(94,94,94);
+    border: 0.1em solid rgb(66, 66, 66);
     transform: translate(-50%, -50%);
     z-index: 1;
     cursor:default;
     transition: opacity 0.045s;
+    color: rgb(230, 221, 221);
+    background: rgb(62,34,0);
+    background: linear-gradient(135deg, rgba(62,34,0,1) 0%, rgba(31, 31, 31, 0.85) 100%);
+    align-items:center;
+    transition: transform 0.1s;
 }
 
-.territoryText {
-    padding: 0 0.5em;
+.person:hover{
+    cursor:pointer;
+    transform-origin: center;
+    transform: translate(-50%, -50%) scale(1.2);
+}
+
+a {
+    all: unset;    
+}
+
+.person.lancaster {
+    background: rgb(62,34,0);
+    background: linear-gradient(135deg, rgba(62,34,0,1) 0%, rgba(162,0,0,0.85) 100%);
+}
+
+.person.york {
+    background: rgb(62,34,0);
+    background: linear-gradient(135deg, rgba(62,34,0,1) 0%, rgba(196,196,196,0.85) 100%);
+}
+
+.personText {
+    padding: 0 1em;
     text-align: center;
+    font-weight:bold;
     font-size: 1em;
     transition: font-size 0s;
 }
 
-.territory:hover .territoryText {
-    transition: font-size 0.1s;
-    font-size: 1.5em !important;
-}
-
-.ventrue {
-    color: white;
-    background-color: rgb(104,0,148);
-}
-
-.daeva {
-    color: white;
-    background-color: rgb(4,0,255);
-}
-
-.mekhet {
-    color: black;
-    background-color: rgb(49,189,223);
-}
-
-.gangrel {
-    color: black;
-    background-color: rgb(184,222,205);
-}
-
-.nos, .nosferatu {
-    color: black;
-    background-color: rgb(130,117,91);
-}
-
-.invictus {
-    color: white;
-    background-color: rgb(232,19,19);
-}
-
-.carthian {
-    color: black;
-    background-color: rgb(239,95,158);
-}
-
-.crone {
-    color: black;
-    background-color: rgb(0,138,14);
-}
-
-.lance {
-    color: black;
-    background-color: rgb(255,227,66);
-}
-
-.ordo {
-    color: black;
-    background-color: rgb(250,120,17);
-}
-
-.court {
-    color: black;
-    background-color: rgb(16,113,229);
-}
-
-.personal {
-    color: rgb(84, 90 ,100);
-    background-color: rgb(178,185,186);
-}
-
-.enemy {
-    color: white;
-    background-color: rgb(58,65,74);
-}
-
-.unclaimed {
-    color: black;
-    background-color: rgb(255, 255, 255);
-}
-
-.contested {
-    border: 0.33em dashed red;
-}
-
-#key {
-    margin-left: 1em;
-    padding-top: 0.05em;
-    padding-bottom: 0.1em;
-}
-
-.inline-territory {
-    display:inline-block;
-    position:relative;
-    transform: none;
-    vertical-align: center;
-    text-align: center;
-    margin: 0 0.1em;
-    padding: 0.25em 0.5em;
-    cursor: pointer;
-}
-
-.inline-territory:hover {
-    transform: scale(1.05)
-}
-
-.crone.inline-territory, .court.inline-territory {
-    color: white;
-}
-
-.court.inline-territory, .enemy.inline-territory{
-    padding: 0.25em 1em;
-}
-
-#panel {
+.onTop {
     position: relative;
-    min-width:20.9%;
-    max-width:40%;
-    height: 100%;
-    cursor: default;
-    float: right;
-    font-family: sans-serif;
-    border-left: 2px solid rgb(221, 221, 221);
-    background-color: rgba(245, 245, 245, 0.9);
-    z-index: 5;    
-    overflow: hidden auto;
-    padding: 0 0.25em 1em 0;
+    z-index: 7;
 }
-
-#panelFlex{
-    flex-direction:column;
-    align-content: flex-start;
-    padding-left: 0.75em;
-}
-
-h1 {
-    position: absolute;
-    text-shadow: 0.05em 0.05em rgba(0,0,0,0.1);
-    margin:0;
-    padding: 0.5em 1em;
-    z-index:7;
-    width: fit-content;
-}
-
-.flex {
-    display:flex;
-}
-
-.panelBox {
-    margin-top: 2.25em;
-    width: 100%;
-    height:100%;
-}
-
-.pull {
-    position:absolute;
-    top: 1%;
-    left: -3em;
-    width: 3em;
-    height:8em;
-    box-sizing:border-box;
-    border-radius: 0.2em 0 0 0.2em;
-    border: 2px solid rgb(221, 221, 221);
-    font-weight:bolder;
-    font-family:monospace;
-    cursor:pointer;
-    z-index: 4;
-    text-align:left;
-    background-color: rgba(245, 245, 245, 0.7);
-}
-
-.pull p {
-    padding: auto;
-    margin: auto;
-    height:100%;
-    line-height: 1.75em;
-    text-align:center;
-    vertical-align: center;
-    font-size: 4em;
-    color: rgba(0,0,0,0.6)
-}
-
-h2 {
-    margin: 0em 4em 0em 1em;
-    color: rgb(121, 121, 121);
-    text-align: left;
-    font-size: 1.06em;
-    font-weight: normal;
-    letter-spacing: 0.05em;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-}
-@media only screen and ((max-width: 1000px))
-    {
-        h2 {
-            font-size: 0.95em;
-            font-weight: 550;
-        }
-    }
-
-h4 {
-    font-weight: normal;
-    letter-spacing: 0.05em;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    width: 20em;
-    height:fit-content;
-}
-
-hr {
-    width: 92%;
-    opacity: 0.25;
-}
-
-.weeksScroll {
-    overflow: hidden auto;
-    height:"fit-content";
-    flex-direction: column;
-    display:flex;
-    padding-right: 2em;
-    padding-bottom: 1em;
-}
-
-@media only screen and (max-width: 1000px)
-    {
-        .hideOnMobile {
-            display:none;
-        }
-    }
-
-.weekOption {
-    cursor:pointer;
-    margin: 0.5em 0em 0em 1em;
-    float: left;
-    border-radius:0.1em;
-    padding: 1em 0em 1em 2em;
-    vertical-align: center;
-    background-color: rgb(238,238,238);
-    box-shadow: 0.15em 0.15em rgba(0,0,0,0.2);
-    transform: translate(0,0em);
-    transition: transform 0.2s;
-    transition: background-color 0.2s;
-}
-
-.weekOption:hover {
-    transform: translate(0,-0.1em);
-    background-color: rgb(220,220,220);
-}
-
-.weekOption.selected {
-    transition: transform 0.2s;
-    background-color: rgb(174, 236, 190);
-    box-shadow: 0.15em 0.15em rgba(0,0,0,0.4);
-}
-
-.bigFlex {
-    display: flex;
-    flex-direction: row;
-    height:100%;
-    align-items: flex-start;
-    justify-content: space-between;
-}
-
-@media only screen and (max-width: 1000px)
-    {
-    .weeksScroll {
-        flex-direction: row;
-        flex-wrap: wrap;
-        padding-right: 0em;
-        align-content: flex-start;
-        overflow: hidden auto;
-        }
-    .weekOption {
-        width: 15%;
-        padding: 0.7em 1.1em;
-        font-size: 0.6em;
-        white-space: nowrap;
-        margin: 0.25em;
-        text-align: center;
-        }
-    #panel {
-        -webkit-overflow-scrolling: touch;
-        overflow-y: scroll;
-    }
-    .panelBox {
-        margin-top: 0.75em;
-        -webkit-overflow-scrolling: touch;
-        }
-    .inline-territory {
-        font-size: 0.7em;
-        }
-    .court.inline-territory, .enemy.inline-territory{
-        padding: 0.25em 0.5em;
-        }
-    #key {
-            margin: 0;
-        }
-    }
-
-@media only screen and (max-width: 1000px) and (orientation: portrait)
-    {
-        #displayParent {
-            transform: translate(20vw,55vh) scale(0.8);
-            transform-origin: center;
-        }   
-
-        .bigFlex {
-            flex-direction: column;
-            justify-content:flex-start;
-            align-content: flex-start;
-        }
-
-        canvas {
-            -webkit-overflow-scrolling: touch;
-            overflow-x: scroll;
-        }
-
-        #panel {
-            width:100%;
-            float: none;
-            max-width: none;
-            height:unset;
-            flex-direction:row;
-            border-bottom: 2px solid rgb(221, 221, 221);
-        }
-
-        #panelFlex {
-            flex-direction:row;
-        }
-
-        .inline-territory {
-            font-size: 0.5em;
-            margin: 0 0.05em;
-            }
-    }
-
-@media only screen and (max-width: 1000px) and (orientation: landscape)
-    {
-        #displayParent {
-            transform: translate(0vw,33vh);
-            transform-origin: center;
-        }   
-    }
