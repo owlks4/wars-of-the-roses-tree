@@ -1,0 +1,99 @@
+Deal with the Devil
+0.85em,-55,45,-25,35
+territory,alignment,holder,emPosX,emPosY,maxHolderLineLength
+Kingstanding,nos,Mr Streed,49.5%,10%,12
+Erdington,lance,Axel Warden,66%,15.5%,0
+Witton,nos,Skitter,54.5%,20%,0
+Perry Barr,nos,Agis,35%,20%,0
+Handsworth,invictus,Madame Lee,9%,28.4%,0
+Lozells,invictus,Mr Hawthorn,22.5%,31.6%,0
+Aston,invictus,Lord James,35.5%,33.4%,0
+City Centre,invictus,Lady Dee,45.5%,40.9%,0
+Nechells,lance,Nollaig Archambault,54%,31.8%,7
+Ward End,lance,Dr Jane Bodkin Adams,64%,36.5%,8
+Hodge Hill,ventrue,Madame Simmons,75%,35%,7
+Castle Bromwich,ventrue,Dr Jane Bodkin Adams,77%,23.3%,15
+Lea Hall,enemy,???,88%,38.25%,12
+Summerfield,personal,Axel Warden,22%,45%,0
+Ladywood,invictus,Lady Themis,35%,51.6%,12
+The Rack,court,NONE,46%,49.2%,12
+Sparkbrook,carthian,Kai Smith,56%,53.4%,12
+Bordesley Green,ventrue,Lady Carrington,68%,50%,0
+Yardley,mekhet,Vesper Raeden,80%,50%,6
+Marston Green,enemy,???,92%,54.25%,0
+Acocks Green,gangrel,Lykofron,77%,65%,0
+Tyseley,gangrel,Lykofron,65%,63.4%,0
+Yardley Wood,gangrel,Alice Maddocks,67%,78.25%,8.25
+Kings Heath,ordo,Chester Willard,53%,85%,7.5
+Moseley,crone,Fang,54%,68.4%,0
+Kings Norton,ordo,Isadora Jones,34%,88.4%,0
+Bournville,crone,Keir of Haworth,39%,76.7%,0
+Selly Oak,carthian,Levi Rose,36%,65.8%,0
+Edgbaston,crone,Zoey Walker,46%,59.1%,0
+Harborne,enemy,???,23%,58.35%,0
+Quinton,daeva,Acacia Smith,10%,56.7%,0
+Bartley Green,enemy,???,9%,70%,0
+Weoley,carthian,Cora Gettins,22%,71.6%,0
+Northfield,daeva,Acacia Smith,16%,85%,0
+ADJ_KNG_ERD,52%,9.6%,64%,14%,side,side
+ADJ_KNG_WTN,49.5%,11.5%,54%,18%,top,top
+ADJ_KNG_PBR,46%,9.6%,37%,19%,side,side
+ADJ_PBR_WTN,37%,21%,52.5%,20%,side,side
+ADJ_WTN_ERD,56.5%,20%,64%,16.5%,side,side
+ADJ_ERD_CTB,69%,15%,77%,23%,side,top
+ADJ_CTB_HHL,77%,26%,75.5%,32.5%,top,top
+ADJ_HHL_LEA,76%,35%,87%,37%,side,side
+ADJ_LEA_MGR,88.5%,41%,91%,53%,top,top
+ADJ_MGR_YDL,89%,54%,81%,49%,side,side
+ADJ_MGR_ACK,91%,57%,80%,65%,top,side
+ADJ_ACK_YDL,77%,64%,79.5%,52%,top,top
+ADJ_LEA_YDL,87%,39.25%,80%,49%,side,top
+ADJ_BDG_YDL,72%,50%,79%,49.5%,side,side
+ADJ_HHL_WDN,73%,35%,65%,37%,side,side
+ADJ_ERD_WDN,66%,18%,63.75%,37%,top,top
+ADJ_WTN_NCH,54.5%,22.5%,54%,30%,top,top
+ADJ_NCH_WDN,55%,30%,62%,36%,side,side
+ADJ_NCH_CTC,52%,34.5%,48%,39%,top,side
+ADJ_NCH_AST,52%,30.5%,39%,32%,side,side
+ADJ_AST_CTC,38%,34.5%,42.5%,39%,top,side
+ADJ_CTC_RCK,45.5%,42%,45.75%,49%,top,top
+ADJ_PBR_HDS,33%,19%,9%,27%,side,top
+ADJ_PBR_LZS,33%,20.75%,24%,31%,side,top
+ADJ_LZS_AST,25%,31.5%,34%,33.5%,side,side
+ADJ_HDS_LZS,10%,28%,20%,31.5%,side,side
+ADJ_LZS_SMR,22.5%,33.5%,22%,42.5%,top,top
+ADJ_HDS_QTN,7.5%,30%,8.5%,57%,top,top
+ADJ_SMR_QTN,21%,45%,11%,57%,top,top
+ADJ_AST_LDY,34%,34.5%,35%,49%,top,top
+ADJ_SMR_LDY,24%,44.5%,32%,51.5%,side,side
+ADJ_LDY_RCK,37%,51%,44%,49.5%,side,side
+ADJ_NCH_SPK,54%,34.5%,56%,52%,top,top
+ADJ_RCK_SPK,48%,49%,53%,53%,side,side
+ADJ_SPK_BDG,58.5%,53%,64%,50%,side,side
+ADJ_WDN_BDG,65%,39%,68%,49%,top,top
+ADJ_SMR_HBN,23%,46%,22.5%,56%,top,top
+ADJ_QTN_HBN,13%,56.5%,21%,58%,side,side
+ADJ_LDY_EDG,35.25%,54%,43%,59%,top,side
+ADJ_RCK_EDG,46%,51%,46.25%,58%,top,top
+ADJ_EDG_SPK,49%,59%,55.5%,56%,side,top
+ADJ_HBN_SLY,25%,59%,34%,66%,side,side
+ADJ_SLY_EDG,39%,66%,45.5%,61%,side,top
+ADJ_EDG_MSY,47%,61.5%,53%,66%,top,top
+ADJ_SPK_TYS,58.5%,55%,64%,61%,side,top
+ADJ_BDG_TYS,68%,51%,66%,61%,top,top
+ADJ_TYS_ACK,67%,63.5%,74%,65%,side,side
+ADJ_MSY_TYS,55%,68.5%,64%,63.5%,side,side
+ADJ_ACK_YDW,76%,67%,68.5%,76.5%,top,top
+ADJ_KGH_YDW,55%,86%,64%,78%,side,side
+ADJ_KGH_MSY,53%,82%,54%,71%,top,top
+ADJ_BNV_MSY,42%,77%,53%,68%,side,side
+ADJ_SLY_BNV,36%,68%,39%,75%,top,top
+ADJ_BNV_KSN,38%,78.5%,35%,86.5%,top,top
+ADJ_KSN_KGH,37%,88%,50%,85%,side,side
+ADJ_SLY_WLY,34%,68%,25%,71.5%,top,side
+ADJ_HBN_WLY,23%,60%,22%,69.5%,top,top
+ADJ_QTN_BTG,9.5%,59%,9%,68%,top,top
+ADJ_BTG_WLY,11.5%,70%,19%,72%,side,side
+ADJ_BTG_NTH,9%,72%,13%,85%,top,side
+ADJ_NTH_WLY,17%,84%,22%,73%,top,top
+ADJ_NTH_KSN,19%,85%,31%,88%,side,side
