@@ -6,15 +6,16 @@ const DEFAULT_YEAR = 1330;
 const SHOW_DEBUG_COORDS_IN_CENTRE = false;
 const MIN_YEAR = 1330;
 const MAX_YEAR = 1485;
-const CANVAS_WIDTH_VW = 80;
-const CANVAS_HEIGHT_VW = 200;
+const CANVAS_WIDTH_VW = 95;
+const CANVAS_HEIGHT_VW = 130;
+
+const P2C_HEIGHT_DIFF = 13; //typical parent to child height diff
 
 let curYear = DEFAULT_YEAR;
 
 let mouseIsOverPanel = false;
 let canvas = null;
 let hasDrawnToCanvasForFirstTime = false;
-let dragging = false;
 
 class PeriodOfDisinheritance {
   start = 0;
@@ -28,7 +29,7 @@ class PeriodOfDisinheritance {
 
 class Person {
 
-  constructor(id,personName,born,died,motherID,fatherID,spouses,xOffset,yOffset,isFemale,periodsOfDisinheritance,imgUrl,wikipediaUrl){
+  constructor(id,personName,house,born,died,motherID,fatherID,spouses,xOffset,yOffset,isFemale,periodsOfDisinheritance,imgUrl,wikipediaUrl){
     this.id = id;
     this.personName = personName;
     this.born = born;
@@ -44,6 +45,7 @@ class Person {
     this.wikipediaUrl = wikipediaUrl;
     this.father = null;
     this.mother = null;
+    this.house = house;
   }
 
   evaluateMyColour(){         
@@ -130,43 +132,77 @@ class Person {
 }
 
 const people = [
-  new Person (0,"Edward III",1312,1377,-1,-1,null,50,5,false,[],
+  new Person (0,"Edward III",null,1312,1377,-1,-1,null,50,5,false,[],
   "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/King_Edward_III.jpg/459px-King_Edward_III.jpg","/Edward_III_of_England"),
-  new Person (1,"Edward of Woodstock",1330,1376,-1,0,null,-40,10,false,[],
+  
+  new Person (1,"Edward of Woodstock",null,1330,1376,-1,0,null,-45,P2C_HEIGHT_DIFF,false,[],
   "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Edward_the_Black_Prince_1430.jpg/450px-Edward_the_Black_Prince_1430.jpg","/Edward_the_Black_Prince"),
-  new Person (2,"Lionel of Antwerp",1338,1368,-1,0,null,-20,10,false,[],
+  
+  new Person (2,"Lionel of Antwerp",null,1338,1368,-1,0,null,-25,P2C_HEIGHT_DIFF,false,[],
   "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/LionelDukeOfClarenceAtWestminster.jpg/257px-LionelDukeOfClarenceAtWestminster.jpg","/Lionel_of_Antwerp"),
-  new Person (3,"John of Gaunt",1340,1399,-1,0,null,-5,10,false,[]),
-  new Person (4,"Edmund of Langley",1341,1402,-1,0,null,20,10,false,[]),
-  new Person (5,"Thomas of Woodstock",1355,1397,-1,0,null,40,10,false,[]),
-  new Person (6,"Richard II",1377,1399,-1,1,null,0,10,false,[]),
-  new Person (7,"Henry IV",1367,1413,-1,3,null,-20,10,false,[]),
-  new Person (8,"John Beaufort",1373,1410,-1,3,null,2.5,10,false,[]),
-  new Person (9,"Thomas Beaufort",1377,1426,-1,3,null,13,10,false,[]),
-  new Person (10,"Joan Beaufort",1379,1440,-1,3,null,22,10,true,[]),
-  new Person (11,"Henry V",1386,1422,-1,7,null,-100,150,false,[]),
-  new Person (12,"Humphrey of Lanc.",1390,1447,-1,7,null,50,10,false,[]),
-  new Person (13,"Henry VI",1421,1471,-1,11,null,50,10,false,[]),
-  new Person (14,"John B. (Duke of Somerset)",1404,1444,-1,8,null,-10,10,false,[]),
-  new Person (15,"Richard of Conisbrough",1385,1415,-1,4,[33],0,20,false,[]),
-  new Person (31,"Philippa of Clarence",1355,1382,-1,2,null,"1100px","115px",true,[new PeriodOfDisinheritance(1355,1460),new PeriodOfDisinheritance(1470,1470)]),  //see Anne de Mortimer comment below
-  new Person (32,"Roger Mortimer",1374,1398,-1,31,null,"0px","92px",false,[]),   //see Anne de Mortimer comment below
-  new Person (33,"Anne de Mortimer",1388,1411,-1,32,[15],"0px","92px",false,[]), //Anne is out of order because her ID was added later than most, but she needs to be spawned before Richard of York so that he descends from the marriage line rather than from his father alone. Logically she needed her parents spawned too, so they've been moved as well
-  new Person (16,"Richard of York",1411,1460,33,15,null,"0px","100px",false,[]),
-  new Person (17,"Margaret Beaufort",1443,1509,-1,14,null,"-150px","150px",true,[]),
-  new Person (18,"Henry VII",1457,1509,-1,17,[25],"0px","289px",false,[]),
-  new Person (19,"Edward IV",1442,1483,-1,16,null,"-175px","150px",false,[new PeriodOfDisinheritance(1483,1484)]),
-  new Person (20,"Richard III",1452,1485,-1,16,null,"175px","150px",false,[]),
-  new Person (21,"Edward of Westminster",1453,1471,-1,13,null,"0px","150px",false,[]),
-  new Person (22,"Edmund Beaufort",1406,1455,-1,8,null,"150px","150px",false,[]),
-  new Person (23,"Margaret Beaufort (Stafford)",1406,1455,-1,22,null,"0px","150px",true,[]),
-  new Person (24,"Duke of Buckingham",1455,1483,-1,23,null,"0px","150px",false,[]),
-  new Person (25,"Elizabeth of York",1466,1503,-1,19,[18],"-150px","150px",true,[]),
-  new Person (26,"Edward V",1470,1483,-1,19,null,"0px","150px",false,[]),
-  new Person (27,"Richard of Shrewsbury",1473,1483,-1,19,null,"175px","150px",false,[]),
-  new Person (28,"George, Duke of Clarence",1449,1478,-1,16,null,"0px","150px",false,[]),
-  new Person (29,"Henry Beaufort",1436,1464,-1,22,null,"-200px","150px",false,[]),
-  new Person (30,"Edmund 4th Duk. Somerset",1438,1471,-1,22,null,"245px","150px",false,[])
+
+  new Person (3,"John of Gaunt","lancaster",1340,1399,-1,0,null,-5,P2C_HEIGHT_DIFF,false,[],
+  "","/John_of_Gaunt"),
+
+  new Person (4,"Edmund of Langley",null,1341,1402,-1,0,null,22,P2C_HEIGHT_DIFF,false,[]),
+
+  new Person (5,"Thomas of Woodstock",null,1355,1397,-1,0,null,45,P2C_HEIGHT_DIFF,false,[]),
+
+  new Person (6,"Richard II",null,1377,1399,-1,1,null,0,P2C_HEIGHT_DIFF,false,[]),
+
+  new Person (7,"Henry IV","lancaster",1367,1413,-1,3,null,-28,P2C_HEIGHT_DIFF,false,[]),
+
+  new Person (8,"John Beaufort","lancaster",1373,1410,-1,3,null,0,P2C_HEIGHT_DIFF,false,[]),
+
+  new Person (9,"Thomas Beaufort","lancaster",1377,1426,-1,3,null,10,P2C_HEIGHT_DIFF,false,[]),
+  
+  new Person (10,"Joan Beaufort","lancaster",1379,1440,-1,3,null,20,P2C_HEIGHT_DIFF,true,[]),
+
+  new Person (11,"Henry V","lancaster",1386,1422,-1,7,null,-5,P2C_HEIGHT_DIFF,false,[]),
+
+  new Person (12,"Humphrey of Lanc.","lancaster",1390,1447,-1,7,null,5,P2C_HEIGHT_DIFF,false,[]),
+
+  new Person (13,"Henry VI","lancaster",1421,1471,-1,11,null,0,P2C_HEIGHT_DIFF,false,[]),
+
+  new Person (14,"John B. (Duke of Somerset)","lancaster",1404,1444,-1,8,null,-8,P2C_HEIGHT_DIFF,false,[]),
+
+  new Person (15,"Richard of Conisbrough",null,1385,1415,-1,4,[33],0,P2C_HEIGHT_DIFF*2,false,[]),
+
+  new Person (31,"Philippa of Clarence",null,1355,1382,-1,2,null,63,P2C_HEIGHT_DIFF*0.75,true,[new PeriodOfDisinheritance(1355,1460),new PeriodOfDisinheritance(1470,1470)]),  //see Anne de Mortimer comment below
+
+  new Person (32,"Roger Mortimer",null,1374,1398,-1,31,null,0,P2C_HEIGHT_DIFF*0.62,false,[]),   //see Anne de Mortimer comment below
+
+  new Person (33,"Anne de Mortimer",null,1388,1411,-1,32,[15],0,P2C_HEIGHT_DIFF*0.62,false,[]), //Anne is out of order because her ID was added later than most, but she needs to be spawned before Richard of York so that he descends from the marriage line rather than from his father alone. Logically she needed her parents spawned too, so they've been moved as well
+
+  new Person (16,"Richard of York","york",1411,1460,33,15,null,0,P2C_HEIGHT_DIFF*0.7,false,[]),
+
+  new Person (17,"Margaret Beaufort","lancaster",1443,1509,-1,14,null,-9,P2C_HEIGHT_DIFF,true,[]),
+
+  new Person (18,"Henry VII","lancaster",1457,1509,-1,17,[25],0,P2C_HEIGHT_DIFF*2,false,[]),
+
+  new Person (19,"Edward IV","york",1442,1483,-1,16,null,-11,P2C_HEIGHT_DIFF*1.3,false,[new PeriodOfDisinheritance(1483,1484)]),
+
+  new Person (20,"Richard III","york",1452,1485,-1,16,null,11,P2C_HEIGHT_DIFF*1.3,false,[]),
+
+  new Person (21,"Edward of Westminster","lancaster",1453,1471,-1,13,null,0,P2C_HEIGHT_DIFF,false,[]),
+
+  new Person (22,"Edmund Beaufort","lancaster",1406,1455,-1,8,null,6,P2C_HEIGHT_DIFF,false,[]),
+
+  new Person (23,"Margaret Beaufort (Stafford)","lancaster",1406,1455,-1,22,null,0,P2C_HEIGHT_DIFF,true,[]),
+
+  new Person (24,"Duke of Buckingham","york",1455,1483,-1,23,null,0,P2C_HEIGHT_DIFF,false,[]),
+
+  new Person (25,"Elizabeth of York","york",1466,1503,-1,19,[18],-9,P2C_HEIGHT_DIFF,true,[]),
+
+  new Person (26,"Edward V","york",1470,1483,-1,19,null,0,P2C_HEIGHT_DIFF,false,[]),
+
+  new Person (27,"Richard of Shrewsbury","york",1473,1483,-1,19,null,10,P2C_HEIGHT_DIFF,false,[]),
+
+  new Person (28,"George, Duke of Clarence","york",1449,1478,-1,16,null,0,P2C_HEIGHT_DIFF*1.3,false,[]),
+
+  new Person (29,"Henry Beaufort","lancaster",1436,1464,-1,22,null,-12,P2C_HEIGHT_DIFF,false,[]),
+
+  new Person (30,"Edmund 4th Duk. Somerset","lancaster",1438,1471,-1,22,null,14.3,P2C_HEIGHT_DIFF,false,[])
 ];
 
 for (let i = 0; i < people.length; i++){
@@ -255,36 +291,16 @@ function App (props){
   let [displayLeft,setDisplayLeft] = useState(window.innerWidth > 1000 ? -16 : 0);
   let [mapAdjustLeft,setMapAdjustLeft] = useState("50%");
   let [mapAdjustTop,setMapAdjustTop] = useState("40%");
-  let [fontSizeEm,setFontSizeEm] = useState(0.89);
-  let [windowFontSize,setWindowFontSize] = useState(window.innerWidth < window.innerHeight ? (window.innerHeight/1920) +"em" : (window.innerWidth/927) +"em");
-
-  document.addEventListener('mousedown', (ev) => {dragging = (true && !mouseIsOverPanel)});
-  document.addEventListener("mousemove", (ev) => {onMouseMove(ev)});
-  document.addEventListener("mouseup", (ev) => {dragging = false;});
-  document.addEventListener("wheel", (ev) => {let change = ev.deltaY/1000; (fontSizeEm - change > 0.5) && (fontSizeEm - change < 3) ? setFontSizeEm(fontSizeEm - change) : null;});
-  window.addEventListener("resize", (ev) => {changeWindowFontSize()});
-
-    function changeWindowFontSize(){
-      setWindowFontSize(window.innerWidth < window.innerHeight ? (window.innerHeight/2400) +"em" : (window.innerHeight/927) +"em");
-    }
+  let [fontSizeEm,setFontSizeEm] = useState(12.6);
 
     useEffect(() => { //Only runs after initial render
       tryInitialiseCanvas();
       redrawCanvas();
-      changeWindowFontSize();
     }, []); //ignore intelliense and keep this empty array; it makes this useEffect run only after the very first render, which is intended behaviour
 
     useEffect(() => {   //runs after render all the time, but only actually does anything once. It's required to get the canvas to realise it needs to redraw to display the adjacencies after the (async) territories are rendered
       tryInitialiseCanvas();
     });
-
-    function onMouseMove(event) {
-      if (dragging){
-        tryInitialiseCanvas();
-        setDisplayLeft(displayLeft + (event.movementX / 16));
-        setDisplayTop(displayTop + event.movementY);
-      }
-    }
 
     function tryInitialiseCanvas(){
       if (!hasDrawnToCanvasForFirstTime){
@@ -326,26 +342,23 @@ function App (props){
 
     return (
     <>
+      <header>
         <h1>
-            {window.innerWidth > 1000 ? "Wars of the Roses tree" : "I recommend you use this on PC instead"}
+          {window.innerWidth > 1000 ? "Interactive Wars of the Roses tree" : "I recommend you use this on PC instead"}    
         </h1>
+        <h3>
+          (Update in progress!)
+        </h3>
         <div style={{display:"flex", alignItems:"center", flexDirection:"column"}}>
           {curYear}
           <input className="onTop" style={{width:"50em", margin:"auto"}} type="range" min={MIN_YEAR} max={MAX_YEAR} step={1}/>
         </div>
-       
-        <div className="bigFlex">
-          <div style={{width:"65%"}}>
-            <div id="displayParent" style={{fontSize:windowFontSize, width:"100%"}}>
-              <div id="display" style={{position:'absolute',left:displayLeft+"em",
-                  top:displayTop+"px",fontSize:fontSizeEm+"em"}}>
-                  <div id="people" style={{position:'absolute',left:"0em", top:"0em",width:(CANVAS_WIDTH_VW*fontSizeEm)+"vw",height:(CANVAS_HEIGHT_VW*fontSizeEm)+"vh"}}>
-                    {people.map((p) => <><PersonReact person = {p}/></>)}
-                    <canvas style={{width:"100%", height:"100%"}}/>
-                  </div>
-              </div>
+      </header>
+        <div style={{width:"100%"}}>
+              <div id="people" style={{position:'relative', margin:"auto", left:"0em", top:"0em",width:(CANVAS_WIDTH_VW)+"vw",height:(CANVAS_HEIGHT_VW)+"vh"}}>
+                {people.map((p) => <><PersonReact fontSizeEm={fontSizeEm} person = {p}/></>)}
+                <canvas style={{width:"100%", height:"100%"}}/>
             </div>
-          </div>
         </div>
     </>
   )
