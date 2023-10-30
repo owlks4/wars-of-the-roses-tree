@@ -54,6 +54,7 @@ canvas {
     border-radius: 0.05em;
     text-align:center;
     vertical-align: middle;
+    max-width: 17em;
     width:fit-content;
     height:fit-content;
     font-family: sans-serif;
@@ -86,6 +87,11 @@ a {
 .person.york {
     background: rgb(62,34,0);
     background: linear-gradient(135deg, rgba(173, 173, 173, 0.85) 0%, rgba(31, 31, 31, 0.85) 100%);
+}
+
+.person.tudor {
+    background: rgb(62,34,0);
+    background: linear-gradient(135deg, rgba(185, 75, 99, 0.85) 0%, rgba(85, 53, 53, 0.85) 100%);
 }
 
 .personText {

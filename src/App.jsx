@@ -8,10 +8,9 @@ const MIN_YEAR = 1330;
 const MAX_YEAR = 1485;
 const CANVAS_WIDTH_VW = 95;
 const CANVAS_HEIGHT_VW = 130;
+let slider = null;
 
-const P2C_HEIGHT_DIFF = 13; //typical parent to child height diff
-
-let curYear = DEFAULT_YEAR;
+const P2C_HEIGHT_DIFF = 12; //typical parent to child height diff
 
 let mouseIsOverPanel = false;
 let canvas = null;
@@ -132,7 +131,7 @@ class Person {
 }
 
 const people = [
-  new Person (0,"Edward III",null,1312,1377,-1,-1,null,50,5,false,[],
+  new Person (0,"Edward III",null,1312,1377,-1,-1,null,50,P2C_HEIGHT_DIFF/2,false,[],
   "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/King_Edward_III.jpg/459px-King_Edward_III.jpg","/Edward_III_of_England"),
   
   new Person (1,"Edward of Woodstock",null,1330,1376,-1,0,null,-45,P2C_HEIGHT_DIFF,false,[],
@@ -144,7 +143,7 @@ const people = [
   new Person (3,"John of Gaunt","lancaster",1340,1399,-1,0,null,-5,P2C_HEIGHT_DIFF,false,[],
   "","/John_of_Gaunt"),
 
-  new Person (4,"Edmund of Langley",null,1341,1402,-1,0,null,22,P2C_HEIGHT_DIFF,false,[]),
+  new Person (4,"Edmund of Langley","york",1341,1402,-1,0,null,22,P2C_HEIGHT_DIFF,false,[]),
 
   new Person (5,"Thomas of Woodstock",null,1355,1397,-1,0,null,45,P2C_HEIGHT_DIFF,false,[]),
 
@@ -164,9 +163,9 @@ const people = [
 
   new Person (13,"Henry VI","lancaster",1421,1471,-1,11,null,0,P2C_HEIGHT_DIFF,false,[]),
 
-  new Person (14,"John B. (Duke of Somerset)","lancaster",1404,1444,-1,8,null,-8,P2C_HEIGHT_DIFF,false,[]),
+  new Person (14,"John Beaufort (Duke of Somerset)","lancaster",1404,1444,-1,8,null,-7,P2C_HEIGHT_DIFF,false,[]),
 
-  new Person (15,"Richard of Conisbrough",null,1385,1415,-1,4,[33],0,P2C_HEIGHT_DIFF*2,false,[]),
+  new Person (15,"Richard of Conisbrough","york",1385,1415,-1,4,[33],0,P2C_HEIGHT_DIFF*2,false,[]),
 
   new Person (31,"Philippa of Clarence",null,1355,1382,-1,2,null,63,P2C_HEIGHT_DIFF*0.75,true,[new PeriodOfDisinheritance(1355,1460),new PeriodOfDisinheritance(1470,1470)]),  //see Anne de Mortimer comment below
 
@@ -176,9 +175,9 @@ const people = [
 
   new Person (16,"Richard of York","york",1411,1460,33,15,null,0,P2C_HEIGHT_DIFF*0.7,false,[]),
 
-  new Person (17,"Margaret Beaufort","lancaster",1443,1509,-1,14,null,-9,P2C_HEIGHT_DIFF,true,[]),
+  new Person (17,"Margaret Beaufort","lancaster",1443,1509,-1,14,null,-11,P2C_HEIGHT_DIFF,true,[]),
 
-  new Person (18,"Henry VII","lancaster",1457,1509,-1,17,[25],0,P2C_HEIGHT_DIFF*2,false,[]),
+  new Person (18,"Henry VII","tudor",1457,1509,-1,17,[25],0,P2C_HEIGHT_DIFF*2,false,[]),
 
   new Person (19,"Edward IV","york",1442,1483,-1,16,null,-11,P2C_HEIGHT_DIFF*1.3,false,[new PeriodOfDisinheritance(1483,1484)]),
 
@@ -186,23 +185,23 @@ const people = [
 
   new Person (21,"Edward of Westminster","lancaster",1453,1471,-1,13,null,0,P2C_HEIGHT_DIFF,false,[]),
 
-  new Person (22,"Edmund Beaufort","lancaster",1406,1455,-1,8,null,6,P2C_HEIGHT_DIFF,false,[]),
+  new Person (22,"Edmund Beaufort","lancaster",1406,1455,-1,8,null,5,P2C_HEIGHT_DIFF,false,[]),
 
   new Person (23,"Margaret Beaufort (Stafford)","lancaster",1406,1455,-1,22,null,0,P2C_HEIGHT_DIFF,true,[]),
 
   new Person (24,"Duke of Buckingham","york",1455,1483,-1,23,null,0,P2C_HEIGHT_DIFF,false,[]),
 
-  new Person (25,"Elizabeth of York","york",1466,1503,-1,19,[18],-9,P2C_HEIGHT_DIFF,true,[]),
+  new Person (25,"Elizabeth of York","york",1466,1503,-1,19,[18],-10,P2C_HEIGHT_DIFF,true,[]),
 
   new Person (26,"Edward V","york",1470,1483,-1,19,null,0,P2C_HEIGHT_DIFF,false,[]),
 
-  new Person (27,"Richard of Shrewsbury","york",1473,1483,-1,19,null,10,P2C_HEIGHT_DIFF,false,[]),
+  new Person (27,"Richard of Shrewsbury","york",1473,1483,-1,19,null,11,P2C_HEIGHT_DIFF,false,[]),
 
   new Person (28,"George, Duke of Clarence","york",1449,1478,-1,16,null,0,P2C_HEIGHT_DIFF*1.3,false,[]),
 
   new Person (29,"Henry Beaufort","lancaster",1436,1464,-1,22,null,-12,P2C_HEIGHT_DIFF,false,[]),
 
-  new Person (30,"Edmund 4th Duk. Somerset","lancaster",1438,1471,-1,22,null,14.3,P2C_HEIGHT_DIFF,false,[])
+  new Person (30,"Edmund, 4th Duke of Somerset","lancaster",1438,1471,-1,22,null,14.3,P2C_HEIGHT_DIFF,false,[])
 ];
 
 for (let i = 0; i < people.length; i++){
@@ -210,14 +209,12 @@ for (let i = 0; i < people.length; i++){
   p.father = getPersonByID(p.fatherID);
   p.mother = getPersonByID(p.motherID);
 
-  console.log (p);
   if (p.father != null && p.mother != null){
     p.xOffset += (p.father.xOffset + p.mother.xOffset) / 2;
     p.yOffset += (p.father.yOffset + p.mother.yOffset) / 2
   } else if (p.father != null){    
     p.xOffset += p.father.xOffset;
     p.yOffset += p.father.yOffset;
-    console.log(p.xOffset);
   } else if (p.mother != null){
     p.xOffset += p.mother.xOffset;
     p.yOffset += p.mother.yOffset;
@@ -292,10 +289,12 @@ function App (props){
   let [mapAdjustLeft,setMapAdjustLeft] = useState("50%");
   let [mapAdjustTop,setMapAdjustTop] = useState("40%");
   let [fontSizeEm,setFontSizeEm] = useState(12.6);
+  let [curYear,setCurYear] = useState(DEFAULT_YEAR);
 
     useEffect(() => { //Only runs after initial render
       tryInitialiseCanvas();
       redrawCanvas();
+      slider = document.getElementById("slider");
     }, []); //ignore intelliense and keep this empty array; it makes this useEffect run only after the very first render, which is intended behaviour
 
     useEffect(() => {   //runs after render all the time, but only actually does anything once. It's required to get the canvas to realise it needs to redraw to display the adjacencies after the (async) territories are rendered
@@ -306,7 +305,6 @@ function App (props){
       if (!hasDrawnToCanvasForFirstTime){
         canvas = document.getElementById("canvas");
          if (canvas != null){
-            console.log("Test")
             redrawCanvas();
             }
           }
@@ -351,12 +349,13 @@ function App (props){
         </h3>
         <div style={{display:"flex", alignItems:"center", flexDirection:"column"}}>
           {curYear}
-          <input className="onTop" style={{width:"50em", margin:"auto"}} type="range" min={MIN_YEAR} max={MAX_YEAR} step={1}/>
+          <input id="slider" className="onTop" style={{width:"50em", margin:"auto"}} type="range" min={MIN_YEAR} max={MAX_YEAR} step={1}
+            onInput={() => {setCurYear(slider.value)}}/>
         </div>
       </header>
         <div style={{width:"100%"}}>
               <div id="people" style={{position:'relative', margin:"auto", left:"0em", top:"0em",width:(CANVAS_WIDTH_VW)+"vw",height:(CANVAS_HEIGHT_VW)+"vh"}}>
-                {people.map((p) => <><PersonReact fontSizeEm={fontSizeEm} person = {p}/></>)}
+                {people.map((p) => <><PersonReact person = {p} curYear={curYear} fontSizeEm={fontSizeEm}/></>)}
                 <canvas style={{width:"100%", height:"100%"}}/>
             </div>
         </div>
