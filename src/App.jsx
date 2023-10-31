@@ -44,6 +44,7 @@ class Person {
     this.wikipediaUrl = wikipediaUrl;
     this.father = null;
     this.mother = null;
+    this.spousePeople = null;
     this.house = house;
   }
 
@@ -208,16 +209,35 @@ for (let i = 0; i < people.length; i++){
   let p = people[i];  
   p.father = getPersonByID(p.fatherID);
   p.mother = getPersonByID(p.motherID);
+ 
+  if (p.spouses != null){
+    p.spousePeople = [];
+    for (let s = 0; s < p.spouses.length; s++){
+      p.spousePeople.push(getPersonByID(p.spouses[s]));
+    }
+  }
+
+  p.parentAvgX = 0;
+  p.parentAvgY = 0;
 
   if (p.father != null && p.mother != null){
-    p.xOffset += (p.father.xOffset + p.mother.xOffset) / 2;
-    p.yOffset += (p.father.yOffset + p.mother.yOffset) / 2
+    p.parentAvgX = (p.father.xOffset + p.mother.xOffset) / 2;
+    p.parentAvgY = (p.father.yOffset + p.mother.yOffset) / 2
   } else if (p.father != null){    
-    p.xOffset += p.father.xOffset;
-    p.yOffset += p.father.yOffset;
+    p.parentAvgX = p.father.xOffset;
+    p.parentAvgY = p.father.yOffset;
   } else if (p.mother != null){
-    p.xOffset += p.mother.xOffset;
-    p.yOffset += p.mother.yOffset;
+    p.parentAvgX = p.mother.xOffset;
+    p.parentAvgY = p.mother.yOffset;
+  }
+
+  p.xOffset += p.parentAvgX;
+  p.yOffset += p.parentAvgY;
+
+  if (p.id == 1){
+    console.log(p.parentAvgX)
+    console.log(p.xOffset)
+    console.log(p.parentAvgX - p.xOffset);
   }
 }
 
@@ -253,32 +273,6 @@ function issueWithMalePreferenceOrder(orig){
       }
   }
   return issue;
-}
-
-class Adjacency {
-  constructor(week,x1,y1,x2,y2,sideOrTop1, sideOrTop2){
-      this.week = week;
-      this.x1 = parseFloat(x1);
-      this.y1 = parseFloat(y1);
-      this.x2 = parseFloat(x2);
-      this.y2 = parseFloat(y2);
-
-      if (sideOrTop1 == "side"){
-        this.a1 = (this.x1 + this.x2) / 2
-        this.b1 = parseFloat(y1);
-      } else {
-        this.a1 =  parseFloat(x1);
-        this.b1 = (this.y1 + this.y2) / 2;
-      }
-
-      if (sideOrTop2 == "side"){
-        this.a2 = (this.x1 + this.x2) / 2
-        this.b2 = parseFloat(y2);
-      } else {
-        this.a2 =  parseFloat(x2);
-        this.b2 = (this.y1 + this.y2) / 2;
-      }
-  }
 }
 
 function App (props){

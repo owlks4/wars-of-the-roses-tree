@@ -42,7 +42,6 @@ h3 {
     text-align:center;
 }
 
-
 canvas {
     position: absolute;
     width:100%;
@@ -81,17 +80,17 @@ a {
 
 .person.lancaster {
     background: rgb(62,34,0);
-    background: linear-gradient(135deg, rgba(110, 0, 0, 0.85) 0%,  rgba(81, 31, 31, 0.85) 100%);
+    background: linear-gradient(135deg, rgba(110, 0, 0, 1) 0%,  rgba(81, 31, 31, 1) 100%);
 }
 
 .person.york {
     background: rgb(62,34,0);
-    background: linear-gradient(135deg, rgba(173, 173, 173, 0.85) 0%, rgba(31, 31, 31, 0.85) 100%);
+    background: linear-gradient(135deg, rgba(173, 173, 173, 1) 0%, rgba(31, 31, 31, 1) 100%);
 }
 
 .person.tudor {
     background: rgb(62,34,0);
-    background: linear-gradient(135deg, rgba(185, 75, 99, 0.85) 0%, rgba(85, 53, 53, 0.85) 100%);
+    background: linear-gradient(135deg, rgba(185, 75, 99, 1) 0%, rgba(85, 53, 53, 1) 100%);
 }
 
 .personText {
@@ -105,4 +104,17 @@ a {
 .onTop {
     position: relative;
     z-index: 7;
+}
+
+.verticalLine {
+    border-left:1px solid #bfc8fa;
+    position:absolute;
+    box-shadow: 10px 5px 5px black;
+}
+
+.horizontalLine {
+    border-top:1px solid #bfc8fa;
+    position:absolute;
+    border-radius:0.1em;
+    box-shadow: 10px 5px 5px black;
 }
