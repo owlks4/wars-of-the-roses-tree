@@ -6,7 +6,7 @@ function PersonReact (props) {
     let [mouseOver, setMouseOver] = useState(false);
 
     return (
-    <div>
+    <div id={props.person.personName.toLowerCase().replaceAll(" ","-")}>
         <a target="_blank" rel="noreferrer" href={"https://wikipedia.org/wiki"+props.person.wikipediaUrl}>
         <div className={"person " + props.person.house} onMouseEnter={() => {setMouseOver(true)}} onMouseLeave={() => {setMouseOver(false)}}
         style={{display:"flex", flexDirection:"row", left:props.person.xOffset + "%", top:props.person.yOffset + "%", zIndex: (mouseOver ? 2 : 1), fontSize:props.fontSizeEm}}>
@@ -48,7 +48,7 @@ function PersonReact (props) {
                                                             <><div className="horizontalLine"
                                                             style={{width:spouse.xOffset - props.person.xOffset +"%",
                                                             left: props.person.xOffset+"%",
-                                                            top:props.person.yOffset+"%",}}/></>
+                                                            top:((props.person.yOffset + spouse.yOffset)/2)+"%",}}/></>
                                                             : null)
 
         }

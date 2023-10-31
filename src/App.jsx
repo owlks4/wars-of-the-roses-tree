@@ -62,7 +62,6 @@ class Person {
 }
 
   isCurrentlyDisinherited(){
-
     if (this.periodsOfDisinheritance == null || this.periodsOfDisinheritance.length == 0){
         return false;
     }
@@ -72,7 +71,6 @@ class Person {
             return true;
         }
     }
-
     return false;
   }
 
@@ -150,7 +148,7 @@ const people = [
 
   new Person (6,"Richard II",null,1377,1399,-1,1,null,0,P2C_HEIGHT_DIFF,false,[]),
 
-  new Person (7,"Henry IV","lancaster",1367,1413,-1,3,null,-28,P2C_HEIGHT_DIFF,false,[]),
+  new Person (7,"Henry IV","lancaster",1367,1413,-1,3,null,-30,P2C_HEIGHT_DIFF,false,[]),
 
   new Person (8,"John Beaufort","lancaster",1373,1410,-1,3,null,0,P2C_HEIGHT_DIFF,false,[]),
 
@@ -164,7 +162,7 @@ const people = [
 
   new Person (13,"Henry VI","lancaster",1421,1471,-1,11,null,0,P2C_HEIGHT_DIFF,false,[]),
 
-  new Person (14,"John Beaufort (Duke of Somerset)","lancaster",1404,1444,-1,8,null,-7,P2C_HEIGHT_DIFF,false,[]),
+  new Person (14,"John Beaufort (Duke of Somerset)","lancaster",1404,1444,-1,8,null,-10,P2C_HEIGHT_DIFF,false,[]),
 
   new Person (15,"Richard of Conisbrough","york",1385,1415,-1,4,[33],0,P2C_HEIGHT_DIFF*2,false,[]),
 
@@ -277,21 +275,17 @@ function issueWithMalePreferenceOrder(orig){
 
 function App (props){
 
-  let [adjacencies,setAdjacencies] = useState([]);
-  let [displayTop,setDisplayTop] = useState(0);
-  let [displayLeft,setDisplayLeft] = useState(window.innerWidth > 1000 ? -16 : 0);
-  let [mapAdjustLeft,setMapAdjustLeft] = useState("50%");
-  let [mapAdjustTop,setMapAdjustTop] = useState("40%");
-  let [fontSizeEm,setFontSizeEm] = useState(12.6);
+  let [fontSizeEm,setFontSizeEm] = useState(window.innerWidth / 152.38);
   let [curYear,setCurYear] = useState(DEFAULT_YEAR);
 
     useEffect(() => { //Only runs after initial render
       tryInitialiseCanvas();
       redrawCanvas();
       slider = document.getElementById("slider");
+      window.addEventListener("resize", (ev) => {setFontSizeEm(window.innerWidth / 152.38)});
     }, []); //ignore intelliense and keep this empty array; it makes this useEffect run only after the very first render, which is intended behaviour
 
-    useEffect(() => {   //runs after render all the time, but only actually does anything once. It's required to get the canvas to realise it needs to redraw to display the adjacencies after the (async) territories are rendered
+    useEffect(() => {   //runs after render all the time, but only actually does anything once.
       tryInitialiseCanvas();
     });
 
@@ -308,26 +302,6 @@ function App (props){
       if (canvas == null){
         return;
       }
-      setAdjacencies(adjacencies);
-      let ctx = canvas.getContext("2d");
-      ctx.imageSmoothingEnabled = true;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.strokeStyle = "#505050";
-      ctx.lineWidth = 1.5;
-    
-      for (let i = 0; i < adjacencies.length; i++){
-        hasDrawnToCanvasForFirstTime = true;
-        let a = adjacencies[i];
-        if (a.week != week){
-            continue;
-          }
-        ctx.beginPath();        
-        ctx.moveTo((a.x1/100) * canvas.width, (a.y1/100) * canvas.height);
-        ctx.bezierCurveTo((a.a1/100) * canvas.width, (a.b1/100) * canvas.height,
-                          (a.a2/100) * canvas.width, (a.b2/100) * canvas.height, 
-                          (a.x2/100) * canvas.width, (a.y2/100) * canvas.height);
-        ctx.stroke();
-        }
     }
 
     tryInitialiseCanvas();
@@ -343,14 +317,13 @@ function App (props){
         </h3>
         <div style={{display:"flex", alignItems:"center", flexDirection:"column"}}>
           {curYear}
-          <input id="slider" className="onTop" style={{width:"50em", margin:"auto"}} type="range" min={MIN_YEAR} max={MAX_YEAR} step={1}
+          <input id="slider" className="onTop" style={{width:"50em", margin:"0.15em 3em"}} type="range" min={MIN_YEAR} max={MAX_YEAR} step={1}
             onInput={() => {setCurYear(slider.value)}}/>
         </div>
       </header>
         <div style={{width:"100%"}}>
               <div id="people" style={{position:'relative', margin:"auto", left:"0em", top:"0em",width:(CANVAS_WIDTH_VW)+"vw",height:(CANVAS_HEIGHT_VW)+"vh"}}>
                 {people.map((p) => <><PersonReact person = {p} curYear={curYear} fontSizeEm={fontSizeEm}/></>)}
-                <canvas style={{width:"100%", height:"100%"}}/>
             </div>
         </div>
     </>

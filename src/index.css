@@ -25,14 +25,14 @@ body {
 
 header {
     margin: 0;
-    padding-top: 1em;
+    padding: 1em 2em 2em 1em;
     background-color: rgb(14, 29, 61);
-    padding-bottom: 2em;
     box-shadow: 10px 5px 5px black;
 }
 
 h1 {
-    margin-top: 0;
+    width:fit-content;
+    margin: auto;
     text-align:center;
 }
 
@@ -109,12 +109,9 @@ a {
 .verticalLine {
     border-left:1px solid #bfc8fa;
     position:absolute;
-    box-shadow: 10px 5px 5px black;
 }
 
 .horizontalLine {
     border-top:1px solid #bfc8fa;
     position:absolute;
-    border-radius:0.1em;
-    box-shadow: 10px 5px 5px black;
 }
