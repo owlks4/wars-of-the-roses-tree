@@ -24,8 +24,9 @@ body {
 }
 
 header {
+    width:100%;
     margin: 0;
-    padding: 1em 2em 2em 1em;
+    padding: 1em 0em 2em 0em;
     background-color: rgb(14, 29, 61);
     box-shadow: 10px 5px 5px black;
 }

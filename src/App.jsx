@@ -2,19 +2,15 @@ import { useState, useEffect } from 'react'
 import './index.css'
 import PersonReact from './PersonReact.jsx';
 
-const DEFAULT_YEAR = 1330;
+const DEFAULT_YEAR = 1327;
 const SHOW_DEBUG_COORDS_IN_CENTRE = false;
-const MIN_YEAR = 1330;
+const MIN_YEAR = 1327;
 const MAX_YEAR = 1485;
 const CANVAS_WIDTH_VW = 95;
 const CANVAS_HEIGHT_VW = 130;
 let slider = null;
 
-const P2C_HEIGHT_DIFF = 12; //typical parent to child height diff
-
-let mouseIsOverPanel = false;
-let canvas = null;
-let hasDrawnToCanvasForFirstTime = false;
+const P2C_HEIGHT_DIFF = 13; //typical parent to child height diff
 
 class PeriodOfDisinheritance {
   start = 0;
@@ -140,67 +136,100 @@ const people = [
   "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/LionelDukeOfClarenceAtWestminster.jpg/257px-LionelDukeOfClarenceAtWestminster.jpg","/Lionel_of_Antwerp"),
 
   new Person (3,"John of Gaunt","lancaster",1340,1399,-1,0,null,-5,P2C_HEIGHT_DIFF,false,[],
-  "","/John_of_Gaunt"),
+  "https://upload.wikimedia.org/wikipedia/commons/d/d4/Johnofgaunt.jpg","/John_of_Gaunt"),
 
-  new Person (4,"Edmund of Langley","york",1341,1402,-1,0,null,22,P2C_HEIGHT_DIFF,false,[]),
+  new Person (4,"Edmund of Langley","york",1341,1402,-1,0,null,24,P2C_HEIGHT_DIFF,false,[],
+  null,"/Edmund_of_Langley,_1st_Duke_of_York"),
 
-  new Person (5,"Thomas of Woodstock",null,1355,1397,-1,0,null,45,P2C_HEIGHT_DIFF,false,[]),
+  new Person (5,"Thomas of Woodstock",null,1355,1397,-1,0,null,45,P2C_HEIGHT_DIFF,false,[],
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/ThomasWoodstock.jpg/555px-ThomasWoodstock.jpg","/Thomas_of_Woodstock,_Duke_of_Gloucester"),
 
-  new Person (6,"Richard II",null,1377,1399,-1,1,null,0,P2C_HEIGHT_DIFF,false,[]),
+  new Person (6,"Richard II",null,1377,1399,-1,1,null,0,P2C_HEIGHT_DIFF,false,[],
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/The_Westminster_Portrait_of_Richard_II_of_England_%281390s%29.jpg/299px-The_Westminster_Portrait_of_Richard_II_of_England_%281390s%29.jpg","/Richard_II_of_England"),
 
-  new Person (7,"Henry IV","lancaster",1367,1413,-1,3,null,-30,P2C_HEIGHT_DIFF,false,[]),
+  new Person (7,"Henry IV","lancaster",1367,1413,-1,3,null,-30,P2C_HEIGHT_DIFF,false,[],
+  "https://upload.wikimedia.org/wikipedia/commons/2/2c/Illumination_of_Henry_IV_%28cropped%29.jpg","/Henry_IV_of_England"),
 
-  new Person (8,"John Beaufort","lancaster",1373,1410,-1,3,null,0,P2C_HEIGHT_DIFF,false,[]),
+  new Person (8,"John Beaufort","lancaster",1373,1410,-1,3,null,-4,P2C_HEIGHT_DIFF,false,[],
+  "https://upload.wikimedia.org/wikipedia/commons/b/b0/Effigy_John_Beaufort_1st_Earl_of_Somerset.png","/John_Beaufort,_1st_Earl_of_Somerset"),
 
-  new Person (9,"Thomas Beaufort","lancaster",1377,1426,-1,3,null,10,P2C_HEIGHT_DIFF,false,[]),
+  new Person (9,"Thomas Beaufort","lancaster",1377,1426,-1,3,null,8,P2C_HEIGHT_DIFF,false,[],
+  null,"/Thomas_Beaufort,_Duke_of_Exeter"),
   
-  new Person (10,"Joan Beaufort","lancaster",1379,1440,-1,3,null,20,P2C_HEIGHT_DIFF,true,[]),
+  new Person (10,"Joan Beaufort","lancaster",1379,1440,-1,3,null,20,P2C_HEIGHT_DIFF,true,[],
+  null,"/Joan_Beaufort,_Countess_of_Westmorland"),
 
-  new Person (11,"Henry V","lancaster",1386,1422,-1,7,null,-5,P2C_HEIGHT_DIFF,false,[]),
+  new Person (11,"Henry V","lancaster",1386,1422,-1,7,null,-9,P2C_HEIGHT_DIFF,false,[],
+  "https://upload.wikimedia.org/wikipedia/commons/a/a7/Henry_V_Miniature.jpg","/Henry_V_of_England"),
 
-  new Person (12,"Humphrey of Lanc.","lancaster",1390,1447,-1,7,null,5,P2C_HEIGHT_DIFF,false,[]),
+  new Person (12,"Humphrey of Lanc.","lancaster",1390,1447,-1,7,null,3,P2C_HEIGHT_DIFF,false,[],
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Gloucester-Talbot-Shrewsbury-Book.jpeg/409px-Gloucester-Talbot-Shrewsbury-Book.jpeg","/Humphrey,_Duke_of_Gloucester"),
 
-  new Person (13,"Henry VI","lancaster",1421,1471,-1,11,null,0,P2C_HEIGHT_DIFF,false,[]),
+  new Person (13,"Henry VI","lancaster",1421,1471,-1,11,null,0,P2C_HEIGHT_DIFF,false,[],
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Henry_VI_of_England%2C_Shrewsbury_book.jpg/417px-Henry_VI_of_England%2C_Shrewsbury_book.jpg","/Henry_VI_of_England"),
 
-  new Person (14,"John Beaufort (Duke of Somerset)","lancaster",1404,1444,-1,8,null,-10,P2C_HEIGHT_DIFF,false,[]),
+  new Person (14,"John Beaufort (Duke of Somerset)","lancaster",1404,1444,-1,8,null,-10,P2C_HEIGHT_DIFF,false,[],
+  "https://upload.wikimedia.org/wikipedia/commons/2/24/Effigy_John_Beaufort_1st_Duke_of_Somerset.png","/John_Beaufort,_1st_Duke_of_Somerset"),
 
-  new Person (15,"Richard of Conisbrough","york",1385,1415,-1,4,[33],0,P2C_HEIGHT_DIFF*2,false,[]),
+  new Person (15,"Richard of Conisbrough","york",1385,1415,-1,4,[33],0,P2C_HEIGHT_DIFF*2,false,[],
+  null,"/Richard_of_Conisburgh,_3rd_Earl_of_Cambridge"),
 
-  new Person (31,"Philippa of Clarence",null,1355,1382,-1,2,null,63,P2C_HEIGHT_DIFF*0.75,true,[new PeriodOfDisinheritance(1355,1460),new PeriodOfDisinheritance(1470,1470)]),  //see Anne de Mortimer comment below
+  new Person (31,"Philippa of Clarence",null,1355,1382,-1,2,null,64,P2C_HEIGHT_DIFF*0.75,true,[new PeriodOfDisinheritance(1355,1460),new PeriodOfDisinheritance(1470,1470)],
+  null,"/Philippa,_5th_Countess_of_Ulster"),  //see Anne de Mortimer comment below
 
-  new Person (32,"Roger Mortimer",null,1374,1398,-1,31,null,0,P2C_HEIGHT_DIFF*0.62,false,[]),   //see Anne de Mortimer comment below
+  new Person (32,"Roger Mortimer",null,1374,1398,-1,31,null,0,P2C_HEIGHT_DIFF*0.62,false,[],
+  null,"/Roger_Mortimer,_4th_Earl_of_March"),   //see Anne de Mortimer comment below
 
-  new Person (33,"Anne de Mortimer",null,1388,1411,-1,32,[15],0,P2C_HEIGHT_DIFF*0.62,false,[]), //Anne is out of order because her ID was added later than most, but she needs to be spawned before Richard of York so that he descends from the marriage line rather than from his father alone. Logically she needed her parents spawned too, so they've been moved as well
+  new Person (33,"Anne de Mortimer",null,1388,1411,-1,32,[15],0,P2C_HEIGHT_DIFF*0.62,false,[],
+  null,"/Anne_de_Mortimer"), //Anne is out of order because her ID was added later than most, but she needs to be spawned before Richard of York so that he descends from the marriage line rather than from his father alone. Logically she needed her parents spawned too, so they've been moved as well
 
-  new Person (16,"Richard of York","york",1411,1460,33,15,null,0,P2C_HEIGHT_DIFF*0.7,false,[]),
+  new Person (34,"Edmund Tudor","tudor",1430,1456,-1,-1,[17],19,P2C_HEIGHT_DIFF*5.5,false,[],
+  null,"/Edmund_Tudor,_1st_Earl_of_Richmond"),
 
-  new Person (17,"Margaret Beaufort","lancaster",1443,1509,-1,14,null,-11,P2C_HEIGHT_DIFF,true,[]),
+  new Person (16,"Richard of York","york",1411,1460,33,15,null,0,P2C_HEIGHT_DIFF*0.7,false,[],
+  null,"/Richard_of_York,_3rd_Duke_of_York"),
 
-  new Person (18,"Henry VII","tudor",1457,1509,-1,17,[25],0,P2C_HEIGHT_DIFF*2,false,[]),
+  new Person (17,"Margaret Beaufort","lancaster",1443,1509,-1,14,[34],0,P2C_HEIGHT_DIFF*2,true,[],
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Lady_Margaret_Beaufort_from_NPG.jpg/383px-Lady_Margaret_Beaufort_from_NPG.jpg","/Lady_Margaret_Beaufort"),
 
-  new Person (19,"Edward IV","york",1442,1483,-1,16,null,-11,P2C_HEIGHT_DIFF*1.3,false,[new PeriodOfDisinheritance(1483,1484)]),
+  new Person (18,"Henry VII","tudor",1457,1509,34,17,[25],0,P2C_HEIGHT_DIFF,false,[],
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Enrique_VII_de_Inglaterra%2C_por_un_artista_an%C3%B3nimo.jpg/174px-Enrique_VII_de_Inglaterra%2C_por_un_artista_an%C3%B3nimo.jpg","/Henry_VII_of_England"),
 
-  new Person (20,"Richard III","york",1452,1485,-1,16,null,11,P2C_HEIGHT_DIFF*1.3,false,[]),
+  new Person (19,"Edward IV","york",1442,1483,-1,16,null,-11,P2C_HEIGHT_DIFF*1.3,false,[new PeriodOfDisinheritance(1483,1484)],
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Edward_IV_Plantagenet.jpg/332px-Edward_IV_Plantagenet.jpg","/Edward_IV_of_England"),
 
-  new Person (21,"Edward of Westminster","lancaster",1453,1471,-1,13,null,0,P2C_HEIGHT_DIFF,false,[]),
+  new Person (20,"Richard III","york",1452,1485,-1,16,null,11,P2C_HEIGHT_DIFF*1.3,false,[],
+  "https://upload.wikimedia.org/wikipedia/commons/0/09/Richard_III_earliest_surviving_portrait.jpg","/Richard_III_of_England"),
 
-  new Person (22,"Edmund Beaufort","lancaster",1406,1455,-1,8,null,5,P2C_HEIGHT_DIFF,false,[]),
+  new Person (21,"Edward of Westminster","lancaster",1453,1471,-1,13,null,0,P2C_HEIGHT_DIFF,false,[],
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/EdwardPrinceOfWalesBeauchampPagaent.jpg/479px-EdwardPrinceOfWalesBeauchampPagaent.jpg","/Edward_of_Westminster,_Prince_of_Wales"),
 
-  new Person (23,"Margaret Beaufort (Stafford)","lancaster",1406,1455,-1,22,null,0,P2C_HEIGHT_DIFF,true,[]),
+  new Person (22,"Edmund Beaufort","lancaster",1406,1455,-1,8,null,8,P2C_HEIGHT_DIFF,false,[],
+  null,"/Edmund_Beaufort,_2nd_Duke_of_Somerset"),
 
-  new Person (24,"Duke of Buckingham","york",1455,1483,-1,23,null,0,P2C_HEIGHT_DIFF,false,[]),
+  new Person (23,"Margaret Beaufort, Countess of Stafford","lancaster",1406,1455,-1,22,null,0,P2C_HEIGHT_DIFF,true,[],
+  null,"/Margaret_Beaufort,_Countess_of_Stafford"),
 
-  new Person (25,"Elizabeth of York","york",1466,1503,-1,19,[18],-10,P2C_HEIGHT_DIFF,true,[]),
+  new Person (24,"Duke of Buckingham","york",1455,1483,-1,23,null,0,P2C_HEIGHT_DIFF,false,[],
+  null,"/Henry_Stafford,_2nd_Duke_of_Buckingham"),
 
-  new Person (26,"Edward V","york",1470,1483,-1,19,null,0,P2C_HEIGHT_DIFF,false,[]),
+  new Person (25,"Elizabeth of York","york",1466,1503,-1,19,[18],-10,P2C_HEIGHT_DIFF,true,[],
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/British_School%2C_16th_century_-_Elizabeth_of_York_-_Haunted_Gallery%2C_Hampton_Court_Palace.jpg/170px-British_School%2C_16th_century_-_Elizabeth_of_York_-_Haunted_Gallery%2C_Hampton_Court_Palace.jpg","/Elizabeth_of_York"),
 
-  new Person (27,"Richard of Shrewsbury","york",1473,1483,-1,19,null,11,P2C_HEIGHT_DIFF,false,[]),
+  new Person (26,"Edward V","york",1470,1483,-1,19,null,0,P2C_HEIGHT_DIFF,false,[],
+  "https://upload.wikimedia.org/wikipedia/commons/5/53/King-edward-v.jpg","/Edward_V_of_England"),
 
-  new Person (28,"George, Duke of Clarence","york",1449,1478,-1,16,null,0,P2C_HEIGHT_DIFF*1.3,false,[]),
+  new Person (27,"Richard of Shrewsbury","york",1473,1483,-1,19,null,11,P2C_HEIGHT_DIFF,false,[],
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Richard_of_Shrewsbury%2C_1._Duke_of_York.jpg/185px-Richard_of_Shrewsbury%2C_1._Duke_of_York.jpg","/Richard_of_Shrewsbury,_Duke_of_York"),
 
-  new Person (29,"Henry Beaufort","lancaster",1436,1464,-1,22,null,-12,P2C_HEIGHT_DIFF,false,[]),
+  new Person (28,"George, Duke of Clarence","york",1449,1478,-1,16,null,0,P2C_HEIGHT_DIFF*1.3,false,[],
+  "https://upload.wikimedia.org/wikipedia/commons/8/8b/George_Plantagenet%2C_Duke_of_Clarence.jpg","/George_Plantagenet,_Duke_of_Clarence"),
 
-  new Person (30,"Edmund, 4th Duke of Somerset","lancaster",1438,1471,-1,22,null,14.3,P2C_HEIGHT_DIFF,false,[])
+  new Person (29,"Henry Beaufort","lancaster",1436,1464,-1,22,null,-12,P2C_HEIGHT_DIFF,false,[],
+  null,"/Henry_Beaufort,_3rd_Duke_of_Somerset"),
+
+  new Person (30,"Edmund, 4th Duke of Somerset","lancaster",1438,1471,-1,22,null,13.5,P2C_HEIGHT_DIFF,false,[],
+  null,"/Edmund_Beaufort_(died_1471)")
 ];
 
 for (let i = 0; i < people.length; i++){
@@ -231,12 +260,6 @@ for (let i = 0; i < people.length; i++){
 
   p.xOffset += p.parentAvgX;
   p.yOffset += p.parentAvgY;
-
-  if (p.id == 1){
-    console.log(p.parentAvgX)
-    console.log(p.xOffset)
-    console.log(p.parentAvgX - p.xOffset);
-  }
 }
 
 function getPersonByID(id){
@@ -279,32 +302,9 @@ function App (props){
   let [curYear,setCurYear] = useState(DEFAULT_YEAR);
 
     useEffect(() => { //Only runs after initial render
-      tryInitialiseCanvas();
-      redrawCanvas();
       slider = document.getElementById("slider");
       window.addEventListener("resize", (ev) => {setFontSizeEm(window.innerWidth / 152.38)});
     }, []); //ignore intelliense and keep this empty array; it makes this useEffect run only after the very first render, which is intended behaviour
-
-    useEffect(() => {   //runs after render all the time, but only actually does anything once.
-      tryInitialiseCanvas();
-    });
-
-    function tryInitialiseCanvas(){
-      if (!hasDrawnToCanvasForFirstTime){
-        canvas = document.getElementById("canvas");
-         if (canvas != null){
-            redrawCanvas();
-            }
-          }
-    }
-
-    function redrawCanvas(){
-      if (canvas == null){
-        return;
-      }
-    }
-
-    tryInitialiseCanvas();
 
     return (
     <>
@@ -317,7 +317,7 @@ function App (props){
         </h3>
         <div style={{display:"flex", alignItems:"center", flexDirection:"column"}}>
           {curYear}
-          <input id="slider" className="onTop" style={{width:"50em", margin:"0.15em 3em"}} type="range" min={MIN_YEAR} max={MAX_YEAR} step={1}
+          <input id="slider" className="onTop" style={{width:window.innerWidth > 1000 ? "30%" : "80%", margin:"0.15em 10em"}} type="range" min={MIN_YEAR} max={MAX_YEAR} step={1}
             onInput={() => {setCurYear(slider.value)}}/>
         </div>
       </header>
