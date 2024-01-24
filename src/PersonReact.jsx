@@ -5,11 +5,24 @@ function PersonReact (props) {
     
     let [mouseOver, setMouseOver] = useState(false);
 
+    let styleObj = {display:"flex", flexDirection:"row", left:props.person.xOffset + "%", top:props.person.yOffset + "%", zIndex: (mouseOver ? 2 : 1), fontSize:props.fontSizeEm};
+
+    //evaluate colour
+    if (props.curYear >= props.person.born && props.curYear < props.person.died){
+        if (props.person.styleOverride != null){
+            styleObj["backgroundColor"] = props.person.styleOverride;
+            styleObj["color"] = "black"
+            styleObj["backgroundImage"] = "inherit";
+        }
+    }
+
+    
+    //render
     return (
     <div id={props.person.personName.toLowerCase().replaceAll(" ","-")}>
         <a target="_blank" rel="noreferrer" href={"https://wikipedia.org/wiki"+props.person.wikipediaUrl}>
         <div className={"person " + props.person.house} onMouseEnter={() => {setMouseOver(true)}} onMouseLeave={() => {setMouseOver(false)}}
-        style={{display:"flex", flexDirection:"row", left:props.person.xOffset + "%", top:props.person.yOffset + "%", zIndex: (mouseOver ? 2 : 1), fontSize:props.fontSizeEm}}>
+        style={styleObj}>
             <div style={{position:"relative",minWidth:"3.2em", backgroundColor:"rgb(20,20,20)"}}>
                 <img src={props.person.imgUrl} style={{verticalAlign:"middle", height:"4em", opacity: "0.9"}}/>
             </div>
@@ -18,6 +31,7 @@ function PersonReact (props) {
                 <br/>
                 {props.person.born + " - "+props.person.died}
             </div>
+            <div className="person-tooltip">{props.person.tooltipText}</div>
         </div>
         </a>
         {

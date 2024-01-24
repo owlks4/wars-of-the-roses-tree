@@ -12,6 +12,8 @@ let slider = null;
 
 const P2C_HEIGHT_DIFF = 13; //typical parent to child height diff
 
+let positionInLineOfSuccessionCurrentlyUpForGrabs = 0; 
+
 class PeriodOfDisinheritance {
   start = 0;
   end = 0;
@@ -32,6 +34,7 @@ class Person {
     this.motherID = motherID;
     this.fatherID = fatherID;
     this.spouses = spouses;
+    this.issue = [];
     this.xOffset = xOffset;
     this.yOffset = yOffset;
     this.isFemale = isFemale;
@@ -42,22 +45,11 @@ class Person {
     this.mother = null;
     this.spousePeople = null;
     this.house = house;
+    this.tooltipText = "N/A";
+    this.styleOverride = null;
   }
 
-  evaluateMyColour(){         
-    if (curYear < this.born){
-        this.domElement.style.color = "rgba(0,0,0,0.2)";
-        this.domElement.style.background = "#4C1A57";
-    } else if (curYear >= this.died){
-        this.domElement.style.color = "rgba(0,0,0,0.5)";
-        this.domElement.style.background = "dimgrey";
-    } else {
-        this.domElement.style.color = "black";
-        this.domElement.style.background = "skyblue";
-    }
-}
-
-  isCurrentlyDisinherited(){
+  isCurrentlyDisinherited(curYear){
     if (this.periodsOfDisinheritance == null || this.periodsOfDisinheritance.length == 0){
         return false;
     }
@@ -70,55 +62,60 @@ class Person {
     return false;
   }
 
-  evaluateCrownPosition(disinherited){
+  evaluateCrownPosition(disinherited,curYear){
+    
     if (this.mySuccessionPosition != -1){ 
         return disinherited;    //then this person has already been considered in this cycle (which means they already have a better claim than the one that would have been evaluated if we hadn't made this check)
     }
 
-    this.tooltipDomElement.textContent = "? not assigned? Is the linkage incorrect?";        
+    this.tooltipText = "? not assigned? Is the linkage incorrect?";        
     
     if (curYear < this.born){
-        this.tooltipDomElement.textContent = "N/A";
+        this.tooltipText = "Not yet born";
     }
-    else if (this.isCurrentlyDisinherited() || disinherited){
+    else if (this.isCurrentlyDisinherited(curYear) || disinherited){
         disinherited = true;
         if (curYear >= this.died){
-            this.tooltipDomElement.textContent = "🚫💀";  //just making sure this applies when needed, otherwise there are edge cases
+          this.tooltipText = "🚫💀";  //just making sure this applies when needed, otherwise there are edge cases
         }
     } else if (curYear >= this.died){
-        this.tooltipDomElement.textContent = "💀";
+        this.tooltipText = "💀";
     } else {        
         this.mySuccessionPosition = positionInLineOfSuccessionCurrentlyUpForGrabs;
         positionInLineOfSuccessionCurrentlyUpForGrabs++;
 
         switch (this.mySuccessionPosition){
             case 0:
-                this.tooltipDomElement.textContent = "👑";
-                this.domElement.style.background = "gold";
+                this.tooltipText = "👑";
+                this.styleOverride = "gold";
             break;
             case 1:
-                this.domElement.style.background = "silver";
+              this.styleOverride = "silver";
             break;
             case 2:
-                this.domElement.style.background = "#cd7f32";
+              this.styleOverride = "#cd7f32";
+            break;
+            default:
+              this.styleOverride = null;
             break;
         }
 
         if (this.mySuccessionPosition != 0){
-            this.tooltipDomElement.textContent = "#"+this.mySuccessionPosition+" in line";
+            this.tooltipText = "#"+this.mySuccessionPosition+" in line";
         }
     }
 
     if (disinherited && curYear >= this.born && curYear < this.died){       //this is here so that it only applies while alive, otherwise it gets lost in the if...else statement, meaning disinherited dead people end up labelled as disinherited, when really their being dead is more noteworthy
-        this.tooltipDomElement.textContent = "🚫 disinherited";
+        this.tooltipText = "🚫 disinherited";
     }
 
     if (this.issue != null){ 
+      console.log("looking at issue")
         let malePreferenceIssue = issueWithMalePreferenceOrder(this.issue); //this orders the children so that the boys are prioritised, regardless of whether the girls are older      
         for (let i = 0; i < malePreferenceIssue.length; i++){ 
             let child = getPersonByID(malePreferenceIssue[i]);
             if (child != null) {
-                child.evaluateCrownPosition(disinherited);
+                child.evaluateCrownPosition(disinherited,curYear);
             }
         }
     }
@@ -237,6 +234,14 @@ for (let i = 0; i < people.length; i++){
   p.father = getPersonByID(p.fatherID);
   p.mother = getPersonByID(p.motherID);
  
+  if (p.father != null){
+    p.father.issue.push(p.id);
+  }
+
+  if (p.mother != null){
+    p.mother.issue.push(p.id);
+  }
+
   if (p.spouses != null){
     p.spousePeople = [];
     for (let s = 0; s < p.spouses.length; s++){
@@ -296,6 +301,14 @@ function issueWithMalePreferenceOrder(orig){
   return issue;
 }
 
+function triggerInheritanceRecalculation(curYear){
+  people.forEach((p) => {
+    p.mySuccessionPosition = -1;
+    positionInLineOfSuccessionCurrentlyUpForGrabs = 0;
+  });
+  getPersonByID(curYear < 1485 ? 0 : 18).evaluateCrownPosition(false,curYear);
+}
+
 function App (props){
 
   let [fontSizeEm,setFontSizeEm] = useState(window.innerWidth / 152.38);
@@ -306,21 +319,21 @@ function App (props){
       window.addEventListener("resize", (ev) => {setFontSizeEm(window.innerWidth / 152.38)});
     }, []); //ignore intelliense and keep this empty array; it makes this useEffect run only after the very first render, which is intended behaviour
 
+    triggerInheritanceRecalculation(curYear);
+
     return (
     <>
-      <header>
-        <h1>
+      <header className="sticky">
+        <h2>
           {window.innerWidth > 1000 ? "Interactive Wars of the Roses tree" : "I recommend you use this on PC instead"}    
-        </h1>
-        <h3>
-          (Update in progress!)
-        </h3>
+        </h2>
         <div style={{display:"flex", alignItems:"center", flexDirection:"column"}}>
           {curYear}
           <input id="slider" className="onTop" style={{width:window.innerWidth > 1000 ? "30%" : "80%", margin:"0.15em 10em"}} type="range" min={MIN_YEAR} max={MAX_YEAR} step={1}
-            onInput={() => {setCurYear(slider.value)}}/>
+            onInput={() => {setCurYear(slider.value);}}/>
         </div>
       </header>
+      <div style={{height:"6em"}}></div>
         <div style={{width:"100%"}}>
               <div id="people" style={{position:'relative', margin:"auto", left:"0em", top:"0em",width:(CANVAS_WIDTH_VW)+"vw",height:(CANVAS_HEIGHT_VW)+"vh"}}>
                 {people.map((p) => <><PersonReact person = {p} curYear={curYear} fontSizeEm={fontSizeEm}/></>)}
