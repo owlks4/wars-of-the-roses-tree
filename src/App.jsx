@@ -14,6 +14,14 @@ const P2C_HEIGHT_DIFF = 13; //typical parent to child height diff
 
 let positionInLineOfSuccessionCurrentlyUpForGrabs = 0; 
 
+let yearDescriptions = {1327: <>Move the slider to change the year and see the line of<br/>succession juggle between the houses of York and Lancaster.</>,
+                        1453: <>In 1453, Henry VI experiences a temporary mental breakdown and cannot rule.<br/>Richard of York manages the country as Protector of the Realm in his stead.</>,
+                        1457: <>Despite Henry's recovery, many nobles now believe that Richard of York is the better<br/>leader of the two, and that he has a superior claim to the throne, through his mother.</>,
+                        1461: <>In 1461, Henry's forces battle the Yorkists at the Battle of Towton - and lose!<br/>Richard is dead, but his son, Edward IV, takes the throne for the House of York.</>,
+                        1470: <>In 1470, Henry returns, exiles Edward IV, and reinstates himself as Henry VI!<br/>But it's short-lived - and Henry is executed for good after the Battle of Tewkesbury.</>,
+                        1483: <>In 1483, Edward IV dies, and his son briefly becomes king - before he and his brother<br/>are disinherited due to rumours of illegitimacy, and vanish. Richard III becomes king.</>,
+                        1485: <>1485: The Lancastrian Henry Tudor takes on Richard III at the Battle of Bosworth.<br/>He takes the crown by conquest, and cements his position through marriage.</>}
+
 class PeriodOfDisinheritance {
   start = 0;
   end = 0;
@@ -309,6 +317,19 @@ function triggerInheritanceRecalculation(curYear){
   getPersonByID(curYear < 1485 ? 0 : 18).evaluateCrownPosition(false,curYear);
 }
 
+function getDescriptionForYear(curYear){
+
+  let output = <></>;
+
+  Object.keys(yearDescriptions).forEach((key) => {
+    if (curYear >= parseInt(key)){
+      output = yearDescriptions[key];
+    }
+  });
+
+  return output;
+}
+
 function App (props){
 
   let [fontSizeEm,setFontSizeEm] = useState(window.innerWidth / 152.38);
@@ -327,10 +348,18 @@ function App (props){
         <h2>
           {window.innerWidth > 1000 ? "Interactive Wars of the Roses tree" : "I recommend you use this on PC instead"}    
         </h2>
-        <div style={{display:"flex", alignItems:"center", flexDirection:"column"}}>
-          {curYear}
-          <input id="slider" className="onTop" style={{width:window.innerWidth > 1000 ? "30%" : "80%", margin:"0.15em 10em"}} type="range" min={MIN_YEAR} max={MAX_YEAR} step={1}
-            onInput={() => {setCurYear(slider.value);}}/>
+        <div style={{display:"flex", width:"100%", alignItems:"center", flexDirection:"row"}}>
+          <div className='third-width'>
+
+          </div>
+          <div className='third-width' id="slider-div" style={{display:"flex", alignItems:"center", flexDirection:"column"}}>
+            {curYear}
+            <input id="slider" className="onTop" style={{width:"100%", margin:"0.15em 0"}} type="range" min={MIN_YEAR} max={MAX_YEAR} step={1}
+              onInput={() => {setCurYear(slider.value);}}/>
+          </div>
+          <div className='third-width' style={{textAlign:"center", marginTop:"-2.5em"}}>
+              {getDescriptionForYear(curYear)}
+          </div>
         </div>
       </header>
       <div style={{height:"6em"}}></div>

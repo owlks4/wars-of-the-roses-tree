@@ -16,7 +16,6 @@ function PersonReact (props) {
         }
     }
 
-    
     //render
     return (
     <div id={props.person.personName.toLowerCase().replaceAll(" ","-")}>

@@ -136,3 +136,7 @@ a {
     top: 0;
     width: 100%
   }
+
+.third-width {
+    width: 33%;
+  }
