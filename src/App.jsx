@@ -15,6 +15,10 @@ const P2C_HEIGHT_DIFF = 13; //typical parent to child height diff
 let positionInLineOfSuccessionCurrentlyUpForGrabs = 0; 
 
 let yearDescriptions = {1327: <>Move the slider to change the year and see the line of<br/>succession juggle between the houses of York and Lancaster.</>,
+                        1399: <>In 1399, Richard II is deposed by dissatisfied magnates - including Henry Bolingbroke.<br/>It is ruled that the crown pass through a female line - so the throne goes to Henry.</>,
+                        1413: <>The crown passes to Henry V, who leads England to<br/>a famous victory at the battle of Agincourt.</>,
+                        1422: <>With the premature death of Henry V, the crown<br/>passes to his infant son, Henry VI.</>,
+                        1432: <>This will prove to be a tumultuous reign.</>,
                         1453: <>In 1453, Henry VI experiences a temporary mental breakdown and cannot rule.<br/>Richard of York manages the country as Protector of the Realm in his stead.</>,
                         1457: <>Despite Henry's recovery, many nobles now believe that Richard of York is the better<br/>leader of the two, and that he has a superior claim to the throne, through his mother.</>,
                         1461: <>In 1461, Henry's forces battle the Yorkists at the Battle of Towton - and lose!<br/>Richard is dead, but his son, Edward IV, takes the throne for the House of York.</>,
@@ -83,6 +87,7 @@ class Person {
     }
     else if (this.isCurrentlyDisinherited(curYear) || disinherited){
         disinherited = true;
+        this.styleOverride = null;
         if (curYear >= this.died){
           this.tooltipText = "🚫💀";  //just making sure this applies when needed, otherwise there are edge cases
         }
@@ -149,7 +154,7 @@ const people = [
   new Person (5,"Thomas of Woodstock",null,1355,1397,-1,0,null,45,P2C_HEIGHT_DIFF,false,[],
   "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/ThomasWoodstock.jpg/555px-ThomasWoodstock.jpg","/Thomas_of_Woodstock,_Duke_of_Gloucester"),
 
-  new Person (6,"Richard II",null,1377,1399,-1,1,null,0,P2C_HEIGHT_DIFF,false,[],
+  new Person (6,"Richard II",null,1377,1400,-1,1,null,0,P2C_HEIGHT_DIFF,false,[new PeriodOfDisinheritance(1399,1399)],
   "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/The_Westminster_Portrait_of_Richard_II_of_England_%281390s%29.jpg/299px-The_Westminster_Portrait_of_Richard_II_of_England_%281390s%29.jpg","/Richard_II_of_England"),
 
   new Person (7,"Henry IV","lancaster",1367,1413,-1,3,null,-30,P2C_HEIGHT_DIFF,false,[],
@@ -179,7 +184,7 @@ const people = [
   new Person (15,"Richard of Conisbrough","york",1385,1415,-1,4,[33],0,P2C_HEIGHT_DIFF*2,false,[],
   null,"/Richard_of_Conisburgh,_3rd_Earl_of_Cambridge"),
 
-  new Person (31,"Philippa of Clarence",null,1355,1382,-1,2,null,64,P2C_HEIGHT_DIFF*0.75,true,[new PeriodOfDisinheritance(1355,1460),new PeriodOfDisinheritance(1470,1470)],
+  new Person (31,"Philippa of Clarence",null,1355,1382,-1,2,null,64,P2C_HEIGHT_DIFF*0.75,true,[new PeriodOfDisinheritance(1399,1460),new PeriodOfDisinheritance(1470,1470)],
   null,"/Philippa,_5th_Countess_of_Ulster"),  //see Anne de Mortimer comment below
 
   new Person (32,"Roger Mortimer",null,1374,1398,-1,31,null,0,P2C_HEIGHT_DIFF*0.62,false,[],
