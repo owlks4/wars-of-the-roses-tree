@@ -2,11 +2,50 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width initial-scale=1.0"/>
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./src/index.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <title>Wars of the Roses tree</title>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <header>
+      <h2>
+        Interactive Wars of the Roses tree
+      </h2>
+      <div id="top-bar">
+        <div style="width:100%;">
+          <h3 style="margin-top:-1em;">Improvement project underway!</h3>
+        </div>
+        <div id="slider-div" style="width:100%; display: flex; align-items: center; flex-direction: column;">
+          <div id="slider-label">
+            1327
+          </div>          
+          <input id="slider" style="width: 100%; margin: 0.15em 0px;" type="range" min="1327" max="1485" step="1">
+        </div>
+        <div id="year-description" style="width:100%;">
+          <div id="year-description-text" style="margin:auto;width:94%;">
+            Move the slider to change the year and see the line of succession juggle between the houses of York and Lancaster.
+          </div>
+        </div>
+      </div>
+    </header>
+    <main id="map"></main>  
+    <script type="module" src="./src/index.js"></script>
   </body>
+  <template id="person-template">
+      <div class="person lancaster">
+        <a id="person-link" target="_blank" rel="noreferrer" >
+          <img src="https://upload.wikimedia.org/wikipedia/commons/d/d4/Johnofgaunt.jpg" id="person-img">
+        </a>
+        <div id="person-text">
+          John of Gaunt
+          <br>
+          1340 - 1399
+        </div>
+        <div id="person-tooltip">
+          Not yet born
+        </div>
+      </div>
+  </template>
 </html>
