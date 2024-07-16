@@ -14,8 +14,17 @@
         Interactive Wars of the Roses tree
       </h2>
       <div id="top-bar">
-        <div style="width:100%;">
-          <h3 style="margin-top:-1em;">Improvement project underway!</h3>
+        <div style="width:100%;">          
+          <div style="width:fit-content;margin:auto;margin-top:-1.5em;margin-bottom:0;">
+            <div style="text-align:left;padding-bottom:0.5em;">
+              <input type="checkbox" name="show-succession-checkbox" id="show-succession-checkbox">
+              <label for="show-succession-checkbox">Show succession</label>
+            </div>
+            <span>
+              (Note: Improvement project in progress!<br>
+              Delivering clearer visuals and better controls.)
+            </span>
+          </div>
         </div>
         <div id="slider-div" style="width:100%; display: flex; align-items: center; flex-direction: column;">
           <div id="slider-label">
@@ -35,16 +44,16 @@
   </body>
   <template id="person-template">
       <div class="person lancaster">
-        <a id="person-link" target="_blank" rel="noreferrer" >
-          <img src="https://upload.wikimedia.org/wikipedia/commons/d/d4/Johnofgaunt.jpg" id="person-img">
-        </a>
         <div id="person-text">
-          John of Gaunt
-          <br>
-          1340 - 1399
+          <div id="person-name">
+            John of Gaunt
+          </div>
+          <div id="person-lifespan">
+            1340 - 1399 
+          </div>
         </div>
         <div id="person-tooltip">
-          Not yet born
+          #1
         </div>
       </div>
   </template>

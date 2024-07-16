@@ -1,9 +1,9 @@
 html {
-    background-color: rgb(8, 17, 36);
-    color: rgb(230, 221, 221);
+    background-color: rgb(250, 250, 250);
+    color: rgb(14, 14, 14);
     padding: 0;
     margin: 0;
-    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -14,7 +14,7 @@ html {
 
 #map {
     height:100%;
-    background-color: #081124;
+    background-color: rgb(230, 230, 230);
 }
 
 body {
@@ -30,12 +30,14 @@ header {
     width:100%;
     margin: 0;
     padding: 1em 0em 1em 0em;
-    background-color: rgb(14, 29, 61);
-    box-shadow: 10px 5px 5px black;
+    background-color: rgb(245, 245, 245);
+    box-shadow: 0px 5px 5px 5px rgba(0,0,0,0.23);
     z-index:5;
 }
 
 h2 {
+    font-size: 1.25em;
+    text-transform:uppercase;
     width:fit-content;
     margin: auto;
     margin-bottom:0.5em;
@@ -52,24 +54,18 @@ h3 {
 }
 
 .person {
+    height: 6em;
     display: flex;
     flex-direction: row;
+    align-items:center;
     box-sizing: border-box;
     position: absolute;
+    transform: translate(-50%, -50%);
     border-radius: 0.05em;
     text-align:center;
-    vertical-align: middle;
-    max-width: 17em;
-    width:fit-content;
-    height:fit-content;
     font-family: sans-serif;
-    border: 0.1em solid rgb(66, 66, 66);
-    transform: translate(-50%, -50%);
     cursor:default;
     transition: opacity 0.045s;
-    color: rgb(230, 221, 221);
-    background: rgb(31,31,31);
-    align-items:center;
     transition: transform 0.1s;
 }
 
@@ -78,62 +74,59 @@ h3 {
     transform: translate(-50%, -50%) scale(1.2);
 }
 
-a {
-    all: unset;    
-}
-
-.person.lancaster {
-    background: rgb(62,34,0);
-    background: linear-gradient(135deg, rgba(110, 0, 0, 1) 0%,  rgba(81, 31, 31, 1) 100%);
-}
-
-.person.york {
-    background: rgb(62,34,0);
-    background: linear-gradient(135deg, rgba(173, 173, 173, 1) 0%, rgba(31, 31, 31, 1) 100%);
-}
-
-.person.tudor {
-    background: rgb(62,34,0);
-    background: linear-gradient(135deg, rgba(185, 75, 99, 1) 0%, rgba(85, 53, 53, 1) 100%);
+.leaflet-div-icon {
+    border: none;
+    background-color:transparent;
 }
 
 #person-text {
     min-width:7em;
-    padding: 0 1em;
+    padding: 0;
     text-align: center;
     font-weight:bold;
     font-size: 1.1em;
     line-height: normal;
     transition: font-size 0s;
-    white-space:nowrap;
 }
 
-#person-link {
-    position: relative;
-    min-width: 3.2em;
-    background-color: rgb(20, 20, 20);
-    cursor:pointer;
+#person-name {
+    min-width:10em;
 }
 
-#person-img {
-    vertical-align: middle;
-    height: 4em;
-    opacity: 0.9;
+#person-lifespan {
+    margin-top:0.5em;
+    font-size:0.875em;
+}
+
+.lancaster #person-lifespan:after {
+    content:" 🌹";
+}
+
+.york #person-lifespan:after {
+    content:" 🌼";
+}
+
+.tudor #person-lifespan:after {
+    content:" 💮";
 }
 
 .monarch {
-    background-color: gold;
-    color:black;
+    border-radius:0.5em;
+    border: 0.5em solid rgb(214, 182, 0);
 }
 
 .heir {
-    background-color: silver;
-    color:black;
+    border-radius:0.5em;
+    border: 0.5em solid silver;
 }
 
 .bronze {
-    background-color: #cd7f32;
-    color:black;
+    border-radius:0.5em;
+    border: 0.5em solid  #cd7f32;
+}
+
+.faded {
+    opacity: 0.1;
 }
 
 #top-bar {
@@ -156,16 +149,16 @@ a {
 #year-description {
     text-align:center;
     margin-top:-2.5em;
+    font-size:0.8em;
 }
 
 #person-tooltip {
     position:absolute;
-    right:-1em;
-    bottom:-1.45em;
     white-space: nowrap;
-    color:white;
-    background-color: rgba(0,0,0,0.75);
-    padding:2px 4px;
-    border-radius:5px;
-    border: 1px solid rgba(255,255,255,0.5);
+    display:none;
+    font-size:9em;
+    width:200%;
+    transform:translate(-25%,0);
+    color:rgba(167, 167, 167, 0.705);
+    font-weight:bold;
 }

@@ -2,10 +2,8 @@ import './index.css'
 import dataJsonUrl from '/data.json?url';
 import 'leaflet';
 import InheritanceInstance from './InheritanceInstance';
-import { tooltip } from 'leaflet';
 
 const DEFAULT_YEAR = 1327;
-const SHOW_DEBUG_COORDS_IN_CENTRE = false;
 const MIN_YEAR = 1327;
 const MAX_YEAR = 1485;
 let curYear = DEFAULT_YEAR;
@@ -31,12 +29,19 @@ slider.oninput = (e) => {
     yearDescElement.innerHTML = getDescriptionForYear(curYear);
 }
 
+document.getElementById("show-succession-checkbox").onchange = (e) => {
+  let newStyle = e.target.checked ? "display:block;" : "display:none;";
+  people.forEach(person => {
+    person.tooltipDomElement.style = newStyle;
+  });
+};
+
 let widthScaleCoefficient = 1.75;
 
 let map = L.map('map', {
   center: [0.67, 0.5*widthScaleCoefficient],
   zoom: 10,
-  minZoom: 10,
+  minZoom: 9.5,
   maxZoom: 10,
   zoomSnap: 0.25,
   zoomDelta:0.25,
@@ -59,16 +64,6 @@ let yearDescriptions = {
 	1485: "1485: The Lancastrian Henry Tudor takes on Richard III at the Battle of Bosworth. He takes the crown by conquest, and cements his position through marriage."
 }
 
-class PeriodOfDisinheritance {
-  start = 0;
-  end = 0;
-
-  constructor (start,end){
-      this.start = start;
-      this.end = end;
-  }
-}
-
 class Person {
   constructor(json){
     this.id = json.id;
@@ -83,8 +78,6 @@ class Person {
     this.yOffset = json.yOffset;
     this.isFemale = json.isFemale;
     this.periodsOfDisinheritance = json.periodsOfDisinheritance;
-    this.imgUrl = json.imgUrl;
-    this.wikipediaUrl = json.wikipediaUrl;
     this.father = null;
     this.mother = null;
     this.spousePeople = null;
@@ -107,6 +100,8 @@ class Person {
 
 function preprocessPeople(){
 
+  people.sort((a,b) => {return a.born == b.born ? 0 : (a.born < b.born ? -1 : 1)}); //sorted into birth order so that we can always be sure that children will generate after both of their parents and thus not incur null references by trying to reference them
+  
   for (let i = 0; i < people.length; i++){
     let p = people[i] = new Person(people[i]);
 
@@ -149,10 +144,9 @@ function preprocessPeople(){
   people.forEach(person => {
       let div = document.getElementById("person-template").content.firstElementChild.cloneNode(true);
 
-      div.className = "person "+person.house;
-      //findChildElementWithIdRecursive(div,"person-link").setAttribute("href", "https://en.wikipedia.org/wiki" + person.wikipediaUrl);
-      findChildElementWithIdRecursive(div,"person-text").innerHTML = person.personName.replaceAll(", ",",<br>") + "<br>" + person.born + "-" + person.died;
-      findChildElementWithIdRecursive(div,"person-img").src = person.imgUrl == null ? "" : person.imgUrl;
+      div.className = "person "+person.house;      
+      findChildElementWithIdRecursive(div,"person-name").innerHTML = person.personName.replaceAll(", ",",<br>");
+      findChildElementWithIdRecursive(div,"person-lifespan").innerText = person.born + " - " + person.died;
 
       person.domElement = div;
       person.tooltipDomElement = findChildElementWithIdRecursive(div,"person-tooltip");
@@ -187,46 +181,35 @@ function triggerInheritanceRecalculation(curYear){
     let inheritancePosition = result.inheritancePositions[person.id];
     switch (inheritancePosition){
         case -4:  //not yet born
-          tooltipText = "Not yet born";
+          displayClass = "person faded";
           break;
         case -3:  //dead
-          tooltipText = "💀";
+          tooltipText = "";
+          displayClass = "person faded";
           break;
         case -2: //disinherited.
-          if (curYear >= person.died){
-            tooltipText = "🚫💀";
-          } else if (curYear < person.born){
-            tooltipText = "Not yet born";
-          } else {
-            tooltipText = "🚫 disinherited";
-          }
+          displayClass = "person faded";
+          tooltipText = "<div style='font-size:0.8em;'>🚫</div>";
           break;
         case -1: //they went completely unprocessed... which probably means they don't descend from the current origin point at all.
-          if (person.isCurrentlyDisinherited(curYear)){
-            tooltipText = "🚫";
-          }
-          if (curYear >= person.died){
-            tooltipText += "💀 Not in line.";
-          } else {
-            tooltipText += " Not in line.";
-          }
+          displayClass = "person faded";
           break;
         case 0:
-          tooltipText = "👑";
-          displayClass = "person monarch";
+          tooltipText = "<div style='font-size:0.6em; transform:translate(0,-90%)'>👑</div>";
+          displayClass += " monarch";
           break;
         case 1:
-          displayClass = "person heir";
+          displayClass += " heir";
           break;
         case 2:
-          displayClass = "person bronze";
+          displayClass += " bronze";
           break;
       }
       if (inheritancePosition > 0){
-        tooltipText = "#"+result.inheritancePositions[person.id]+" in line";
+        tooltipText = result.inheritancePositions[person.id];
       }
       person.domElement.className = displayClass;
-      person.tooltipDomElement.innerText = tooltipText;
+      person.tooltipDomElement.innerHTML = tooltipText;
     });
 }
 
