@@ -29,7 +29,8 @@ slider.oninput = (e) => {
     yearDescElement.innerHTML = getDescriptionForYear(curYear);
 }
 
-document.getElementById("show-succession-checkbox").onchange = (e) => {
+let showSuccessionCheckbox = document.getElementById("show-succession-checkbox")
+showSuccessionCheckbox.onchange = (e) => {
   let newStyle = e.target.checked ? "display:block;" : "display:none;";
   people.forEach(person => {
     person.tooltipDomElement.style = newStyle;
@@ -244,9 +245,8 @@ start();
 async function start(){
   await fetch(dataJsonUrl).then(async response => {
     people = await response.json();
-
     preprocessPeople();
-
     triggerInheritanceRecalculation(curYear);
+    showSuccessionCheckbox.onchange({target:showSuccessionCheckbox});
   });
 };
