@@ -3,57 +3,47 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="attr" content="owlks4"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./src/index.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <title>Wars of the Roses tree</title>
   </head>
   <body>
-    <header>
-      <h2>
-        Interactive Wars of the Roses tree
-      </h2>
-      <div id="top-bar">
-        <div style="width:100%;">          
-          <div style="width:fit-content;margin:auto;margin-top:-1.5em;margin-bottom:0;">
-            <div style="text-align:left;padding-bottom:0.5em;">
-              <input type="checkbox" name="show-succession-checkbox" id="show-succession-checkbox">
-              <label for="show-succession-checkbox">Show succession</label>
-            </div>
-            <span>
-              (Note: Improvement project in progress!<br>
-              Delivering clearer visuals and better controls.)
-            </span>
-          </div>
-        </div>
-        <div id="slider-div" style="width:100%; display: flex; align-items: center; flex-direction: column;">
-          <div id="slider-label">
-            1327
-          </div>          
-          <input id="slider" style="width: 100%; margin: 0.15em 0px;" type="range" min="1327" max="1485" step="1">
-        </div>
-        <div id="year-description" style="width:100%;">
-          <div id="year-description-text" style="margin:auto;width:94%;">
-            Move the slider to change the year and see the line of succession juggle between the houses of York and Lancaster.
-          </div>
-        </div>
-      </div>
-    </header>
-    <main id="map"></main>  
+    <main id="map"></main>
     <script type="module" src="./src/index.js"></script>
   </body>
+  <template id="stencil-template">
+    <div id="stencil">
+      <div id="start-button">
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,0)">
+          START
+        </div>        
+      </div>
+      <div class="stencil-block" id="stencil-0"></div>     
+      <div class="stencil-block grey" id="stencil-1"></div>  
+    </div>
+  </template>
+  <template id="connection-template">
+    <div id="scaling-parent">
+      <div class="horizontalLine">
+        <!-- Do not put the upwards vertical line here, attach it to the parent instead. This is to prevent bunching of multiple upticking lines from multiple children (it'd be nice if they all overlapped perfectly, but this is often not the case in practice.)-->
+        <div class="verticalLine"></div>
+      </div>
+    </div>    
+  </template>
   <template id="person-template">
       <div class="person lancaster">
         <div id="person-text">
           <div id="person-name">
-            John of Gaunt
+            Undefined
           </div>
           <div id="person-lifespan">
-            1340 - 1399 
+            0000 - 0000
           </div>
         </div>
         <div id="person-tooltip">
-          #1
+          1
         </div>
       </div>
   </template>

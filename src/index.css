@@ -1,5 +1,5 @@
 html {
-    background-color: rgb(250, 250, 250);
+    background-color: white;
     color: rgb(14, 14, 14);
     padding: 0;
     margin: 0;
@@ -9,7 +9,7 @@ html {
     -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
-    user-select: none;    
+    user-select: none;
 }
 
 #map {
@@ -36,6 +36,7 @@ header {
 }
 
 h2 {
+    color:rgb(17,17,17);
     font-size: 1.25em;
     text-transform:uppercase;
     width:fit-content;
@@ -64,7 +65,7 @@ h3 {
     border-radius: 0.05em;
     text-align:center;
     font-family: sans-serif;
-    cursor:default;
+    cursor:grab;
     transition: opacity 0.045s;
     transition: transform 0.1s;
 }
@@ -72,6 +73,10 @@ h3 {
 .person:hover{
     transform-origin: center;
     transform: translate(-50%, -50%) scale(1.2);
+}
+
+.person:active {
+    cursor:grabbing;
 }
 
 .leaflet-div-icon {
@@ -132,23 +137,52 @@ h3 {
 #top-bar {
     display: flex;
     width: 100%;
-    align-items:center;
+    height: 8em;
+    padding-top:2em;
+    align-items:top;
     flex-direction: row;
 }
 
+#scaling-parent {
+    height:10px;
+    transform-origin:top;
+    transform: scale(100%,100%);
+    transition: transform 0.2s;
+}
+
 .verticalLine {
-    border-left:1px solid #bfc8fa;
+    border-left:2px solid  rgb(90,90,90);   
     position:absolute;
+    height:50%;
+    top:0;
+}
+
+.verticalLine#up {
+    top:-50%;
+    left:100%;
 }
 
 .horizontalLine {
-    border-top:1px solid #bfc8fa;
+    border-top:2px solid rgb(90,90,90);    
     position:absolute;
+    width:100%;
+}
+
+.horizontalLine.reverse {
+    transform:translate(-100%,0)
+}
+
+.horizontalLine.reverse .verticalLine {
+    right:0;
+}
+
+.horizontalLine.reverse .verticalLine#up  {
+    left:0;
+    top:-50%; 
 }
 
 #year-description {
     text-align:center;
-    margin-top:-2.5em;
     font-size:0.8em;
 }
 
@@ -159,6 +193,82 @@ h3 {
     font-size:9em;
     width:200%;
     transform:translate(-25%,0);
-    color:rgba(167, 167, 167, 0.705);
+    color:rgba(172, 171, 168, 0.705);
+    font-weight:bold;
+}
+
+#stencil {
+    position:absolute;
+    width:100vw;
+    height:100vh;
+}
+
+.stencil-block {
+    position:absolute;
+    background-color: rgba(255,255,255,0.99);    
+    width:100vw;
+    height:100vh;
+    will-change: clip-path;
+    transition: clip-path 0.4s;
+}
+
+.stencil-block.grey {
+    background-color: rgba(255, 255, 255, 0.596);
+}
+
+.leaflet-left .leaflet-control {
+    margin: 0;
+}
+
+.blocking-bg {
+    background-color: rgb(182, 42, 42);
+    width:100vw;
+    height:100vh;
+    position:absolute;
+}
+
+#start-button {
+    position:absolute;
+    top:45%;
+    left:50%;
+    height:10em;
+    width:10em;
+    transform:translate(-50%,-50%);
+    text-align:center;
+    line-height:0;
+    font-size:2.5em;
+    letter-spacing: 0.04em;
+    font-weight:bold;
+    color:rgb(58, 0, 0);
+    cursor:pointer;
+    transition: font-size 0.1s;
+}
+
+#start-button:hover {
+    font-size:3em;
+}
+
+#start-button:active {
+    font-size:2.25em;
+}
+
+article {
+    padding:17vh 8.5vw 0vh 8.5vw;
+    font-size:2em;
+    text-align:left;
+    max-width:25vw;
+    color:rgb(9, 9, 70);
+    opacity:1.0;
+    animation-name: fadeIn;
+    animation-duration: 0.4s;
+}
+
+@keyframes fadeIn {
+    from {opacity:0.0; transform:translate(-100%,0)}
+    to {opacity:1.0; transform:translate(0%,0)}
+}
+
+article h3 {
+    text-align:left;
     font-weight:bold;
 }
