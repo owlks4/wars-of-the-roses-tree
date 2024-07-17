@@ -7,16 +7,11 @@
 		"motherID":-1,
 		"fatherID":-1,
 		"spouses":null,
-		"xOffset":50,
-		"yOffset":6.5,
+		"relativeHorizontalPosition":0,
+		"generation":0,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":null,
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":null
 	},
 	{
 		"id":1,
@@ -26,16 +21,11 @@
 		"motherID":-1,
 		"fatherID":0,
 		"spouses":null,
-		"xOffset":-45,
-		"yOffset":13,
+		"relativeHorizontalPosition":-5,
+		"generation":1,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":null,
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":null
 	},
 	{
 		"id":2,
@@ -45,16 +35,11 @@
 		"motherID":-1,
 		"fatherID":0,
 		"spouses":null,
-		"xOffset":-25,
-		"yOffset":13,
+		"relativeHorizontalPosition":-2.5,
+		"generation":1,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":null,
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":null
 	},
 	{
 		"id":3,
@@ -63,17 +48,12 @@
 		"died":1399,
 		"motherID":-1,
 		"fatherID":0,
-		"spouses":null,
-		"xOffset":-5,
-		"yOffset":13,
+		"spouses":null,		
+		"relativeHorizontalPosition":-0.5,
+		"generation":1,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":"lancaster",
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":"lancaster"
 	},
 	{
 		"id":4,
@@ -83,16 +63,11 @@
 		"motherID":-1,
 		"fatherID":0,
 		"spouses":null,
-		"xOffset":24,
-		"yOffset":13,
+		"relativeHorizontalPosition":2,
+		"generation":1,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":"york",
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":"york"
 	},
 	{
 		"id":5,
@@ -102,16 +77,11 @@
 		"motherID":-1,
 		"fatherID":0,
 		"spouses":null,
-		"xOffset":45,
-		"yOffset":13,
+		"relativeHorizontalPosition":4,
+		"generation":1,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":null,
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":null
 	},
 	{
 		"id":6,
@@ -121,19 +91,14 @@
 		"motherID":-1,
 		"fatherID":1,
 		"spouses":null,
-		"xOffset":0,
-		"yOffset":13,
+		"relativeHorizontalPosition":0,
+		"generation":2,
 		"isFemale":false,
 		"periodsOfDisinheritance":[{
 			"start":1399,
 			"end":1399
 		}],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":null,
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":null
 	},
 	{
 		"id":7,
@@ -143,16 +108,11 @@
 		"motherID":-1,
 		"fatherID":3,
 		"spouses":null,
-		"xOffset":-30,
-		"yOffset":13,
+		"relativeHorizontalPosition":-3,
+		"generation":2,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":"lancaster",
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":"lancaster"
 	},
 	{
 		"id":8,
@@ -162,16 +122,11 @@
 		"motherID":-1,
 		"fatherID":3,
 		"spouses":null,
-		"xOffset":-4,
-		"yOffset":13,
+		"relativeHorizontalPosition":-1,
+		"generation":2,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":"lancaster",
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":"lancaster"
 	},
 	{
 		"id":9,
@@ -181,16 +136,11 @@
 		"motherID":-1,
 		"fatherID":3,
 		"spouses":null,
-		"xOffset":8,
-		"yOffset":13,
+		"relativeHorizontalPosition":0.25,
+		"generation":2,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":"lancaster",
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":"lancaster"
 	},
 	{
 		"id":10,
@@ -200,16 +150,11 @@
 		"motherID":-1,
 		"fatherID":3,
 		"spouses":null,
-		"xOffset":20,
-		"yOffset":13,
+		"relativeHorizontalPosition":1.5,
+		"generation":2,
 		"isFemale":true,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":"lancaster",
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":"lancaster"
 	},
 	{
 		"id":11,
@@ -219,16 +164,11 @@
 		"motherID":-1,
 		"fatherID":7,
 		"spouses":null,
-		"xOffset":-9,
-		"yOffset":13,
+		"relativeHorizontalPosition":-1.1,
+		"generation":3,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":"lancaster",
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":"lancaster"
 	},
 	{
 		"id":12,
@@ -238,16 +178,11 @@
 		"motherID":-1,
 		"fatherID":7,
 		"spouses":null,
-		"xOffset":3,
-		"yOffset":13,
+		"relativeHorizontalPosition":0.25,
+		"generation":3,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":"lancaster",
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":"lancaster"
 	},
 	{
 		"id":13,
@@ -257,16 +192,11 @@
 		"motherID":-1,
 		"fatherID":11,
 		"spouses":null,
-		"xOffset":0,
-		"yOffset":13,
+		"relativeHorizontalPosition":0,
+		"generation":4,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":"lancaster",
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":"lancaster"
 	},
 	{
 		"id":14,
@@ -276,16 +206,11 @@
 		"motherID":-1,
 		"fatherID":8,
 		"spouses":null,
-		"xOffset":-10,
-		"yOffset":13,
+		"relativeHorizontalPosition":-0.5,
+		"generation":3,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":"lancaster",
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":"lancaster"
 	},
 	{
 		"id":15,
@@ -295,16 +220,11 @@
 		"motherID":-1,
 		"fatherID":4,
 		"spouses":[33],
-		"xOffset":0,
-		"yOffset":26,
+		"relativeHorizontalPosition":0,
+		"generation":3.2,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":"york",
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":"york"
 	},
 	{
 		"id":31,
@@ -314,8 +234,8 @@
 		"motherID":-1,
 		"fatherID":2,
 		"spouses":null,
-		"xOffset":64,
-		"yOffset":9.75,
+		"relativeHorizontalPosition":6,
+		"generation":1.8,
 		"isFemale":true,
 		"periodsOfDisinheritance":[{
 			"start":1399,
@@ -324,12 +244,7 @@
 			"start":1470,
 			"end":1470
 		}],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":null,
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":null
 	},
 	{
 		"id":32,
@@ -339,16 +254,11 @@
 		"motherID":-1,
 		"fatherID":31,
 		"spouses":null,
-		"xOffset":0,
-		"yOffset":8.06,
+		"relativeHorizontalPosition":0,
+		"generation":2.5,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":null,
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":null
 	},
 	{
 		"id":33,
@@ -358,16 +268,11 @@
 		"motherID":-1,
 		"fatherID":32,
 		"spouses":[15],
-		"xOffset":0,
-		"yOffset":8.06,
+		"relativeHorizontalPosition":0,
+		"generation":3.2,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":null,
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":null
 	},
 	{
 		"id":34,
@@ -377,16 +282,11 @@
 		"motherID":-1,
 		"fatherID":-1,
 		"spouses":[17],
-		"xOffset":19,
-		"yOffset":71.5,
+		"relativeHorizontalPosition":-3.5,
+		"generation":5,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":"tudor",
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":"tudor"
 	},
 	{
 		"id":16,
@@ -396,16 +296,11 @@
 		"motherID":33,
 		"fatherID":15,
 		"spouses":null,
-		"xOffset":0,
-		"yOffset":9.1,
+		"relativeHorizontalPosition":0,
+		"generation":4,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":"york",
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":"york"
 	},
 	{
 		"id":17,
@@ -415,16 +310,11 @@
 		"motherID":-1,
 		"fatherID":14,
 		"spouses":[34],
-		"xOffset":0,
-		"yOffset":26,
+		"relativeHorizontalPosition":0,
+		"generation":5,
 		"isFemale":true,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":"lancaster",
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":"lancaster"
 	},
 	{
 		"id":18,
@@ -434,16 +324,11 @@
 		"motherID":34,
 		"fatherID":17,
 		"spouses":[25],
-		"xOffset":0,
-		"yOffset":13,
+		"relativeHorizontalPosition":0,
+		"generation":6,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":"tudor",
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":"tudor"
 	},
 	{
 		"id":19,
@@ -453,19 +338,14 @@
 		"motherID":-1,
 		"fatherID":16,
 		"spouses":null,
-		"xOffset":-11,
-		"yOffset":16.900000000000002,
+		"relativeHorizontalPosition":-1,
+		"generation":5,
 		"isFemale":false,
 		"periodsOfDisinheritance":[{
 			"start":1483,
 			"end":1484
 		}],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":"york",
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":"york"
 	},
 	{
 		"id":20,
@@ -475,16 +355,11 @@
 		"motherID":-1,
 		"fatherID":16,
 		"spouses":null,
-		"xOffset":11,
-		"yOffset":16.9,
+		"relativeHorizontalPosition":1,
+		"generation":5,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":"york",
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":"york"
 	},
 	{
 		"id":21,
@@ -494,16 +369,11 @@
 		"motherID":-1,
 		"fatherID":13,
 		"spouses":null,
-		"xOffset":0,
-		"yOffset":13,
+		"relativeHorizontalPosition":0,
+		"generation":5,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":"lancaster",
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":"lancaster"
 	},
 	{
 		"id":22,
@@ -513,16 +383,11 @@
 		"motherID":-1,
 		"fatherID":8,
 		"spouses":null,
-		"xOffset":8,
-		"yOffset":13,
+		"relativeHorizontalPosition":1.3,
+		"generation":3,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":"lancaster",
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":"lancaster"
 	},
 	{
 		"id":23,
@@ -532,16 +397,11 @@
 		"motherID":-1,
 		"fatherID":22,
 		"spouses":null,
-		"xOffset":0,
-		"yOffset":13,
+		"relativeHorizontalPosition":0,
+		"generation":4,
 		"isFemale":true,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":"lancaster",
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":"lancaster"
 	},
 	{
 		"id":24,
@@ -551,16 +411,11 @@
 		"motherID":-1,
 		"fatherID":23,
 		"spouses":null,
-		"xOffset":0,
-		"yOffset":13,
+		"relativeHorizontalPosition":0,
+		"generation":5,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":"york",
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":"york"
 	},
 	{
 		"id":25,
@@ -570,16 +425,11 @@
 		"motherID":-1,
 		"fatherID":19,
 		"spouses":[18],
-		"xOffset":-10,
-		"yOffset":13,
+		"relativeHorizontalPosition":-1,
+		"generation":6,
 		"isFemale":true,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":"york",
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":"york"
 	},
 	{
 		"id":26,
@@ -589,16 +439,11 @@
 		"motherID":-1,
 		"fatherID":19,
 		"spouses":null,
-		"xOffset":0,
-		"yOffset":13,
+		"relativeHorizontalPosition":0,
+		"generation":6,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":"york",
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":"york"
 	},
 	{
 		"id":27,
@@ -608,16 +453,11 @@
 		"motherID":-1,
 		"fatherID":19,
 		"spouses":null,
-		"xOffset":11,
-		"yOffset":13,
+		"relativeHorizontalPosition":1,
+		"generation":6,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":"york",
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":"york"
 	},
 	{
 		"id":28,
@@ -627,16 +467,11 @@
 		"motherID":-1,
 		"fatherID":16,
 		"spouses":null,
-		"xOffset":0,
-		"yOffset":16.900000000000002,
+		"relativeHorizontalPosition":0,
+		"generation":5,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":"york",
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":"york"
 	},
 	{
 		"id":29,
@@ -646,16 +481,11 @@
 		"motherID":-1,
 		"fatherID":22,
 		"spouses":null,
-		"xOffset":-12,
-		"yOffset":13,
+		"relativeHorizontalPosition":-1.25,
+		"generation":4,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":"lancaster",
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":"lancaster"
 	},
 	{
 		"id":30,
@@ -665,16 +495,11 @@
 		"motherID":-1,
 		"fatherID":22,
 		"spouses":null,
-		"xOffset":13.5,
-		"yOffset":13,
+		"relativeHorizontalPosition":1.25,
+		"generation":4,
 		"isFemale":false,
 		"periodsOfDisinheritance":[],
-		"father":null,
-		"mother":null,
-		"spousePeople":null,
-		"house":"lancaster",
-		"tooltipText":"N/A",
-		"styleOverride":null
+		"house":"lancaster"
 	}
 ]
 
