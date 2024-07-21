@@ -66,8 +66,7 @@ h3 {
     text-align:center;
     font-family: sans-serif;
     cursor:grab;
-    transition: opacity 0.045s;
-    transition: transform 0.1s;
+    transition: opacity 0.45s, transform 0.1s;
 }
 
 .person:hover{
@@ -117,12 +116,12 @@ h3 {
 
 .monarch {
     border-radius:0.5em;
-    border: 0.5em solid rgb(214, 182, 0);
+    border: 0.5em solid rgba(214, 182, 0, 0.6);
 }
 
 .heir {
     border-radius:0.5em;
-    border: 0.5em solid silver;
+    border: 0.5em solid rgba(192,192,192,0.6);
 }
 
 .bronze {
@@ -253,7 +252,7 @@ h3 {
 }
 
 article {
-    padding:17vh 8.5vw 0vh 8.5vw;
+    padding:17vh 7.5vw 0vh 7.5vw;
     font-size:2em;
     text-align:left;
     max-width:25vw;
@@ -261,6 +260,14 @@ article {
     opacity:1.0;
     animation-name: fadeIn;
     animation-duration: 0.4s;
+    position:relative;
+}
+
+article p {
+    min-height:30vh;
+    line-height:1.2;
+    font-size:0.9em;
+    overflow-y:auto;
 }
 
 @keyframes fadeIn {
@@ -271,4 +278,21 @@ article {
 article h3 {
     text-align:left;
     font-weight:bold;
+}
+
+button {
+    border: none;
+    background-color:rgb(3, 3, 75);
+    color:white;
+    font-size:1em;
+    padding:0.3em 1em;
+    cursor:pointer;
+    border-radius:0.1em;
+    margin-right:1em;
+}
+
+.buttons-div{
+    display:flex;
+    width:20vw;
+    justify-content: space-between;
 }
