@@ -146,7 +146,7 @@ let ArticleHolder = L.Control.extend({
   onAdd: function (map) {
     var div = L.DomUtil.create('div');
     this.article = document.createElement("article");
-    this.article.style = "font-size:"+(window.innerWidth / 960)+"em";
+    this.article.style = "font-size:"+(window.innerWidth / 960)+"em;" + (window.innerWidth < window.innerHeight ? "padding-bottom:2em;" : "");
     this.article.className = "not-shown";
     div.appendChild(this.article);
     this._div = div;
@@ -206,8 +206,8 @@ let Stencil = L.Control.extend({
       this.startButton.remove();
     };
 
-    L.DomEvent.disableClickPropagation(this._div);
-    L.DomEvent.disableScrollPropagation(this._div);
+    //L.DomEvent.disableClickPropagation(this._div);
+    //L.DomEvent.disableScrollPropagation(this._div);
 
     return this._div;
   },
@@ -262,6 +262,36 @@ class Person {
     this.mother = null;
     this.spousePeople = null;
     this.house = json.house;
+  }
+
+  hasAtLeastOneLivingSibling(year){
+
+    if (this.father != null && this.father.issue != null){
+      for (let i = 0; i < this.father.issue.length; i++){
+        let child = this.father.issue[i];
+        if (child != this && child.isAliveInYear(year)){
+          return true;
+        }
+      }  
+    }
+
+    if (this.mother != null && this.mother.issue != null){
+      for (let i = 0; i < this.mother.issue.length; i++){
+        let child = this.mother.issue[i];
+        if (child != this && child.isAliveInYear(year)){
+          return true;
+        }
+      }  
+    }
+
+    return false;
+  }
+
+  isAliveInYear(year){
+    if (year < this.born || year >= this.died){
+      return false;
+    }
+    return true;
   }
 
   isCurrentlyDisinherited(year){
@@ -373,7 +403,7 @@ function triggerInheritanceRecalculation(year){
           displayClass = "person faded";
           break;
         case -2: //disinherited.
-          if (year < person.born || year >= person.died){
+          if (!person.isAliveInYear(year)){
             displayClass = "person faded";
           } else {
             displayClass = "person";
@@ -381,7 +411,7 @@ function triggerInheritanceRecalculation(year){
           tooltipText = "<div style='font-size:0.8em;'>🚫</div>";
           break;
         case -1: //they went completely unprocessed... which probably means they don't descend from the current origin point at all.
-          if (year < person.born || year >= person.died){
+          if (!person.isAliveInYear(year)){
             displayClass = "person faded";
           } else {
             displayClass = "person";
@@ -429,6 +459,11 @@ function getArticleForYear(year){
   h3.innerHTML = eventObj.title;
   let p = document.createElement("p");
   p.innerHTML = eventObj.description;
+
+  if (window.innerWidth < window.innerHeight){
+    p.style =  "min-height:unset;";
+  }
+
   div.appendChild(h3);
   div.appendChild(p);
   let buttonsDiv = document.createElement("div");
@@ -503,7 +538,7 @@ function redrawCanvas(year){
   people.forEach(person => {
     let coords = [0,0];
 
-    if (year < person.born || year >= person.died){
+    if (!person.isAliveInYear(year)){
       ctx.strokeStyle = "rgba(60,60,60,0.1)";
     } else {
       ctx.strokeStyle = "rgb(60,60,60)";
@@ -525,14 +560,16 @@ function redrawCanvas(year){
         ctx.stroke();
         ctx.strokeStyle = originalStrokeStyle;
       }
-      ctx.beginPath();
-      coords = toCanvasCoords([person.parentAvgX, (person.yOffset + person.parentAvgY) / 2]);
-      ctx.moveTo(coords[0],coords[1]);
-      coords = toCanvasCoords([person.xOffset, (person.yOffset + person.parentAvgY) / 2]);
-      ctx.lineTo(coords[0],coords[1]);
-      coords = toCanvasCoords([person.xOffset, person.yOffset - (DEFAULT_WIDTH_BETWEEN_INDIVIDUALS/2.2)]);
-      ctx.lineTo(coords[0],coords[1]);
-      ctx.stroke();
+      if (person.hasAtLeastOneLivingSibling(year) || (person.father != null && person.father.isAliveInYear(year)) || (person.mother != null && person.mother.isAliveInYear(year))){ //and there is at least one living sibling or parent
+        ctx.beginPath();
+        coords = toCanvasCoords([person.parentAvgX, (person.yOffset + person.parentAvgY) / 2]);
+        ctx.moveTo(coords[0],coords[1]);
+        coords = toCanvasCoords([person.xOffset, (person.yOffset + person.parentAvgY) / 2]);
+        ctx.lineTo(coords[0],coords[1]);
+        coords = toCanvasCoords([person.xOffset, person.yOffset - (DEFAULT_WIDTH_BETWEEN_INDIVIDUALS/2.2)]);
+        ctx.lineTo(coords[0],coords[1]);
+        ctx.stroke();
+      }
     }
   });
 
@@ -560,21 +597,29 @@ function zoomToShowIndividuals(individuals){
   let group = new L.featureGroup(markers);
   let bounds = group.getBounds();
   let faraway = bounds.getSouthWest()
-  bounds = bounds.extend([faraway.lat,faraway.lng-1.15]); //arbitrarily extends the bounds so that the zoom instead goes off-centre within the window (so that we can see the result through the rosette window)
+
+  let horizontalViewOffset = 1.15;
+
+  if (window.innerWidth < window.innerHeight && window.matchMedia("(orientation: portrait)").matches){ //mobile portrait mode
+    horizontalViewOffset = 0;
+  }
+
+  bounds = bounds.extend([faraway.lat,faraway.lng - horizontalViewOffset]); //arbitrarily extends the bounds so that the zoom instead goes off-centre within the window (so that we can see the result through the rosette window)
   map.flyToBounds(bounds, {duration:1});
 }
 
-
-window.onresize = ()=>{
+window.onresize = ()=>{ //pc
   if (window.innerWidth > window.innerHeight){
-    articleHolder.article.style = "font-size:"+(window.innerWidth / 960)+"em; padding-left:"+((window.innerWidth / 1920) * 7.5)+"vw";  
-  } else {
-    articleHolder.article.style = "max-height:25vh;background-color:white;font-size:"+(window.innerWidth / 360)+"em; padding:1em;width:100vw;max-width:unset;box-sizing:border-box;"
-
+    articleHolder.article.style = "font-size:"+(window.innerWidth / 960)+"em; padding-left:"+((window.innerWidth / 1920) * 7.5)+"vw";
+    people.forEach(person => {
+      person.domElement.style = "font-size:"+((window.innerWidth/1920)*0.925)+"em;";
+    });
+  } else { //mobile
+    articleHolder.article.style = "background-color:white;font-size:"+(window.innerWidth / 360)+"em; padding:1em; width:100vw;max-width:unset;box-sizing:border-box;";
+    people.forEach(person => {
+      person.domElement.style = "font-size:"+((window.innerWidth/480)*0.925)+"em;";
+    });
   }
-  people.forEach(person => {
-    person.domElement.style = "font-size:"+((window.innerWidth/1920)*0.925)+"em;";
-  });
 }
 
 start();
